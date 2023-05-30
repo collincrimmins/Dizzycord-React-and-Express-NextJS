@@ -1,0 +1,17 @@
+.BodyLogin {
+    /* Box */
+    gap: 20px;
+    width: 400px;
+    padding-top: 20px;
+}
+
+.LoginGoogleBox {
+    display: flex;
+    gap: 5px;
+    width: 60%;
+}
+
+.GoogleImage {
+    width: 30px;
+    height: 30px;
+}

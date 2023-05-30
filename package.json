@@ -5,12 +5,15 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "concurrently \"next dev\" \"firebase emulators:start\"",
     "lint": "next lint"
   },
   "dependencies": {
+    "date-fns": "^2.30.0",
+    "firebase": "^9.22.1",
     "next": "13.4.4",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-spinners": "^0.13.8"
   }
 }

@@ -1,0 +1,67 @@
+.Navbar {
+  position: fixed; /* Keep Header visable at All Times */
+  width: 100%;
+  height: 50px;
+  top: 0;
+  background-color: #333;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.AppHeaderLogo {
+  height: 90%;
+}
+
+.AppHeaderLogo:hover {
+  opacity: 0.8;
+}
+
+.HomeNavbarItem {
+  margin-left: 5px;
+  font-size: 2rem;
+  font-weight: bolder;
+  display: flex;
+  color: inherit;
+  text-decoration: none;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 0, 0, 0)(255, 255, 255);
+  /* padding: .25rem; */
+}
+
+.NavbarItem {
+  font-size: 1.25rem;
+  margin: auto;
+  color: inherit;
+  text-decoration: none;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 0, 0, 0);
+  /* padding: .25rem; */
+}
+  
+.AccountButton {
+    font-size: 1.25rem;
+    font-weight: bold;
+    height: 80%;
+    margin: auto;
+}
+
+  .Navbar ul {
+    margin-right: 5px;
+    list-style: none;
+    display: flex;
+    gap: 10px;
+  }
+  
+  .NavbarItem:hover {
+    text-decoration: underline;
+  }
+  
+  .account-button:hover {
+    text-decoration: underline;
+  }

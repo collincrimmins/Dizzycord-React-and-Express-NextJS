@@ -1,0 +1,284 @@
+/* App */
+
+* {
+  font-family: "Segoe UI";
+  margin: 0;
+  padding: 0;
+  gap: 0;
+}
+
+.firebase-emulator-warning {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.MainHeaderOffset {
+  /* Body */
+  background-color: rgba(148, 148, 148, 0);
+  /* Border for Header */
+  border-top: 50px solid rgba(255, 255, 255, 0);
+}
+
+/* Generic */
+
+.CenterDivColumn {
+  /* Center Items */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
+}
+
+.CenterDivRow {
+  /* Center Items */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: auto;
+}
+
+/* Containers */
+
+.ContainerGeneric {
+  /* Box */
+  background: white;
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  /* Padding */
+  padding: 10px;
+}
+
+.ContainerCentered {
+  /* Box */
+  background: white;
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  /* Center Items */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  /* Padding */
+  padding: 10px;
+  gap: 10px;
+}
+
+.ContainerGray {
+  /* Box */
+  background: rgb(214, 214, 214);
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  /* Center Items */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  /* Padding */
+  padding: 10px;
+  gap: 10px;
+}
+
+.ContainerError {
+  /* Box */
+  background: rgba(253, 0, 0, 0.274);
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px solid red;
+  /* Text */
+  color: black;
+  font-weight: bold;
+  /* Center Items */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  /* Padding */
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.ContainerSuccess {
+  /* Box */
+  background: rgba(0, 255, 21, 0.329);
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px solid rgb(0, 255, 21);
+  /* Text */
+  color: black;
+  font-weight: bold;
+  /* Center Items */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  /* Padding */
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+/* Headers */
+
+.HeaderMain {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+/* Button Text */
+
+.ButtonBold {
+  font-weight: bold !important;
+}
+
+.ButtonTextLarge {
+  font-size: 1.4rem !important;
+}
+
+/* Button Outlines */
+
+.ButtonOutlineBlack {
+  border: 1px solid rgb(0, 0, 0) !important;
+}
+
+.ButtonOutlineGray {
+  border: 1px solid rgb(214, 214, 214) !important;
+}
+
+.ButtonOutlineWhite {
+  border: 1px solid rgb(255, 255, 255) !important;
+}
+
+/* Button Colors */
+
+.ButtonBlack {
+  color: white !important;
+  background-color: rgb(0, 0, 0) !important;
+}
+
+.ButtonGray {
+  background-color: rgb(214, 214, 214) !important;
+}
+
+.ButtonLightGray {
+  background-color: rgb(238, 238, 238) !important;
+}
+
+.ButtonBlue {
+  color: white !important;
+  background-color: rgb(38, 0, 255) !important;
+}
+
+.ButtonLightBlue {
+  color: white !important;
+  background-color: rgb(0, 132, 255) !important;
+}
+
+.ButtonNeonGreen {
+  background-color: rgb(0, 255, 21) !important;
+}
+
+.ButtonRed {
+  color: white !important;
+  background-color: rgb(255, 0, 0) !important;
+}
+
+/* Buttons */
+
+.ButtonRounded {
+  /* Box */
+  color: rgb(0, 0, 0);
+  background-color: rgb(214, 214, 214);
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  /* Padding */
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  /* Width */
+  min-width: 120px;
+  /* Text */
+  font-size: 1rem;
+}
+
+.ButtonRounded:hover {
+  box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.288);
+}
+
+.Button {
+  /* Box */
+  color: rgb(0, 0, 0);
+  background-color: rgb(214, 214, 214);
+  border-radius: 0px;
+  border: none;
+  cursor: pointer;
+  /* Padding */
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  /* Width */
+  min-width: 100px
+}
+
+.ButtonRounded:hover {
+  box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.288);
+}
+
+.ButtonSquare {
+  /* Box */
+  color: rgb(0, 0, 0);
+  background-color: rgb(214, 214, 214);
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  /* Padding */
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 50px;
+  height: 50px;
+  /* Text */
+  font-size: 1rem;
+}
+
+.ButtonSquare:hover {
+  box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.288);
+}
+
+/* Input & Forms */
+
+.Input {
+  padding: 10px;
+  width: 100%;
+  max-height: 50px;
+  border: 1px solid rgb(182, 182, 182);
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.InputError {
+  padding: 10px;
+  max-height: 50px;
+  background-color: rgba(253, 0, 0, 0.274);
+  border: 2px solid red;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
