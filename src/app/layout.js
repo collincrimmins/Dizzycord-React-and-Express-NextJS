@@ -4,7 +4,6 @@ import Navbar from "./Navbar"
 import { AuthProvider } from "./AuthContext"
 import "./css/App.css"
 import { useEffect } from "react";
-import favicon from "../../public/favicon.ico"
 
 export const metadata = {
   title: "Test App",
