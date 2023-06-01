@@ -18,8 +18,8 @@ export const setFirestoreUsername = async (Input) => {
 }
 
 // Get Usernames Profiles
-export const FirestoreGetAllUsers = async (docs) => {
-    return httpsCallable(getFunctions(), "FirestoreGetAllUsers")(docs)
+export const FirestoreGetArrayUserProfiles = async (docs) => {
+    return httpsCallable(getFunctions(), "FirestoreGetArrayUserProfiles")(docs)
     .catch((error) => {
         printError(error)
     })
@@ -83,8 +83,8 @@ export const apicalltest = () => {
 
 // Errors
 
-const printError = (error) => {
-    console.warn("API Error:")
-    console.warn(error.code + " (" + error.message + ")")
-    console.warn(error.details)
-}
+// const printError = (error) => {
+//     console.warn("API Error:")
+//     console.warn(error.code + " (" + error.message + ")")
+//     console.warn(error.details)
+// }

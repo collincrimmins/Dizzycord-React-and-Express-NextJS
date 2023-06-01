@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useAuthContext } from './AuthContext'
 import "./css/App.css"
 import "./css/Navbar.css"
-import DizzycordIcon from "./images/Dizzycord.png"
+import DizzycordIcon from "./images/DizzycordFullName.png"
 
 export default function Navbar() {
     const {User, logout} = useAuthContext()
@@ -48,16 +48,3 @@ export default function Navbar() {
         </nav>
     )
 }
-
-// function ViewPage({to, children, ...props}) {
-//     return (
-//         <>{children}</>
-//     )
-//     // const resolvedPath = useResolvedPath(to)
-//     // const isActive = useMatch({path:resolvedPath.pathname, end:true})
-//     // return (
-//     //     <li className={isActive ? "active" : ""}>
-//     //         <Link to={to} {...props}> {children} </Link>
-//     //     </li>
-//     // )
-// }

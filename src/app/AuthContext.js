@@ -7,7 +7,7 @@ import {
     onAuthStateChanged, updateEmail, updatePassword
 } from "firebase/auth"
 //import "firebase/compat/auth"
-import {getUsernameFromUID} from './functions/Firestore'
+import {getUsernameFromUID} from './functions/FunctionsFirestore'
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 

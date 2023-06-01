@@ -1,11 +1,12 @@
 import React, {useState, useEffect, useRef} from 'react'
 import { useAuthContext } from '../AuthContext'
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
-import { getUsernameFromUID } from '../functions/Firestore'
+import { getUsernameFromUID } from '../functions/FunctionsFirestore'
 import {firestore} from "../FirebaseSetup"
 import "../css/Chat.css"
-import {FirestoreGetAllUsers} from '../functions/Firestore'
+import {FirestoreGetArrayUserProfiles} from '../functions/FunctionsFirestore'
 import Image from 'next/image';
+import {PulseLoader} from "react-spinners";
 // Firestore
 import {
     collection,
@@ -25,6 +26,7 @@ export default function Chat() {
     const [userProfiles, setUserProfiles] = useState([
         //{uid: "g37ZzS5dEZPBSmzyHbUA7zs8OIWH", Username: "Test"}
     ])
+    const [loading, setLoading] = useState(false)
     const scrollRef = useRef()
 
     // Initialization
@@ -97,7 +99,7 @@ export default function Chat() {
         // Check if API Call Required
         if (newUserIds.length > 0) {
             // Get User Profiles from API
-            const profileDocs = await FirestoreGetAllUsers(newUserIds)
+            const profileDocs = await FirestoreGetArrayUserProfiles(newUserIds)
             // Apply to User Profiles
             setUserProfiles((prevUserProfiles) => {
                 let newProfiles = [...prevUserProfiles]
@@ -116,6 +118,8 @@ export default function Chat() {
 
     // Messages Subscription (Error: Instant spam-add of 50+ messages will hit 10 Snapshot Limit)
     const getMessagesSubscription = () => {
+        // Loading
+        setLoading(true)
         // Get Snapshot
         const Query = query(
             collection(firestore, "Chat"), 
@@ -144,6 +148,8 @@ export default function Chat() {
                 Messages.sort(function(doc1, doc2) {
                     return doc2.Time.valueOf() - doc1.Time.valueOf()
                 })
+                // Loading
+                setLoading(false)
                 // Return
                 return Messages
             })
@@ -228,9 +234,27 @@ export default function Chat() {
             scrollRef.current.scrollIntoView({behavior:"smooth"})
         }
     }
+
+    const LoadingFrame = () => {
+        if (loading) {
+            return (
+                <div className="LoadingFrame">
+                    <PulseLoader
+                        color={"#ffffff"}
+                        loading={loading}
+                        radius={25}
+                        height={45}
+                        width={10}
+                        margin={25}
+                    />
+                </div>
+            )
+        }
+    }
     
     return (
         <div className="Chatbox">
+            <LoadingFrame/>
             <ul className="ChatboxScroll">
                 <div ref={scrollRef}></div>
                 {messages.map(msg => { 
