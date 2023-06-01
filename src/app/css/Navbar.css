@@ -11,6 +11,7 @@
 }
 
 .AppHeaderLogo {
+  width: auto;
   height: 90%;
 }
 
@@ -43,25 +44,43 @@
   background-color: rgba(255, 0, 0, 0);
   /* padding: .25rem; */
 }
+
+.NavbarItemActive {
+  height: 60%;
+  margin: auto;
+  /* Box */
+  color: rgb(0, 0, 0);
+  background-color: rgb(214, 214, 214);
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  /* Padding */
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  /* Width */
+  width: auto;
+}
   
 .AccountButton {
-    font-size: 1.25rem;
-    font-weight: bold;
-    height: 80%;
-    margin: auto;
+  font-size: 1.25rem;
+  font-weight: bold;
+  height: 80%;
+  margin: auto;
 }
 
-  .Navbar ul {
-    margin-right: 5px;
-    list-style: none;
-    display: flex;
-    gap: 10px;
-  }
-  
-  .NavbarItem:hover {
-    text-decoration: underline;
-  }
-  
-  .account-button:hover {
-    text-decoration: underline;
-  }
+.Navbar ul {
+  margin-right: 5px;
+  list-style: none;
+  display: flex;
+  gap: 10px;
+}
+
+.NavbarItem:hover {
+  text-decoration: underline;
+}
+
+.account-button:hover {
+  text-decoration: underline;
+}

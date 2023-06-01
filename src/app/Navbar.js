@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import Link from 'next/link'
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useAuthContext } from './AuthContext'
 import "./css/App.css"
 import "./css/Navbar.css"
@@ -8,24 +10,32 @@ import DizzycordIcon from "./images/Dizzycord.png"
 
 export default function Navbar() {
     const {User, logout} = useAuthContext()
-    //const navigate = useNavigate()
     const router = useRouter();
+    const pathname = usePathname();
 
-    function navigateToLogin() {
-        //navigate("/login")
-        router.push('/login')
+    // Button that will be Underlined when Page Active
+    function ViewPageButton({dest, children}) {
+        // Check Page Active
+        let pageActive = false
+        if (dest === pathname) {
+            pageActive = true
+        }
+        // Mark Link as Active or not Active
+        return (
+            <Link href={dest} className={`NavbarItem ${pageActive ? "NavbarItemActive" : ""}`}> {children} </Link>
+        )
     }
 
     return (
         <nav className="Navbar">
             <Link href="/" className="HomeNavbarItem">   
-                <img src={DizzycordIcon} alt="..." className="AppHeaderLogo"/>
+                <Image src={DizzycordIcon} alt="..." className="AppHeaderLogo" />
             </Link>
             <ul>
                 {User && (
                     <>
-                        <Link href="/tasks" className="NavbarItem">Todos</Link>
-                        <Link href="/settings" className="NavbarItem">Settings</Link>
+                        <ViewPageButton dest="/tasks">Todos</ViewPageButton>
+                        <ViewPageButton dest="/settings">Settings</ViewPageButton>
                         <button onClick={logout} className="ButtonRounded ButtonRed ButtonBold ButtonTextLarge AccountButton"> Logout </button>
                     </>
                 )}

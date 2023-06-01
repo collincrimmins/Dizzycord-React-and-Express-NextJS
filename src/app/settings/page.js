@@ -5,6 +5,7 @@ import {useAuthContext} from "../AuthContext"
 import {setFirestoreUsername, getUsernameFromUID} from '../functions/Firestore';
 import "../css/App.css"
 import "../css/Settings.css"
+import { useRouter } from 'next/navigation';
 // Firestore
 import {
     collection,
@@ -13,9 +14,8 @@ import {
     serverTimestamp 
   } from "firebase/firestore"
 
-export default function Page() {
-    const {User, updateUserEmail, updateUserPassword} = useAuthContext()
-    const [username, setUsername] = useState("")
+export default function SettingsPage() {
+    const {User, username, setUsername, updateUserEmail, updateUserPassword} = useAuthContext()
     const [usernameMessage, setUsernameMessage] = useState("")
     const [usernameError, setUsernameError] = useState("")
     const [emailMessage, setEmailMessage] = useState("")
@@ -28,19 +28,7 @@ export default function Page() {
     const emailConfirmRef = useRef()
     const passwordRef = useRef()
     const passwordConfirmRef = useRef()
-
-    if (!User) { return }
-
-    useEffect(() => {
-        // Get Username
-        getUsernameFromUID(User.uid)
-        .then((result) => {
-            // Set Username
-            if (result) {
-                setUsername(result)
-            }
-        })
-    }, [])
+    const router = useRouter();
 
     async function submitUsernameUpdate(e) {
         e.preventDefault()
@@ -211,6 +199,8 @@ export default function Page() {
 
         setLoading(false)
     }
+
+    if (!User) { return }
 
     return (
         <main>

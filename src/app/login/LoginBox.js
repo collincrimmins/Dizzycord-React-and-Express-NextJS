@@ -1,8 +1,9 @@
 import React, {useState, useEffect, useRef} from 'react'
 import { useAuthContext } from '../AuthContext'
-import GoogleIcon from "../images/Google.png"
 import "../css/Login.css"
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import GoogleIcon from "../images/Google.png"
 
 export default function LoginBox({viewSignup, viewResetPassword}) {
     const {login, loginWithGoogle, signup} = useAuthContext()
@@ -12,11 +13,9 @@ export default function LoginBox({viewSignup, viewResetPassword}) {
     const [emptyFields, setEmptyFields] = useState([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
-    //const navigate = useNavigate()
     const router = useRouter();
 
     function loginSuccess() {
-        //navigate("/")
         router.push('/')
     }
 
@@ -47,7 +46,6 @@ export default function LoginBox({viewSignup, viewResetPassword}) {
             signup(email, password) // await signup(emailRef.current.value, passwordRef.current.value)
             .then((userCredential) => {
                 const user = userCredential.user;
-                //navigate("/")
                 router.push('/')
             })
             .finally(() => {
@@ -129,7 +127,7 @@ export default function LoginBox({viewSignup, viewResetPassword}) {
                 Forgot Password?
                 <button onClick={viewResetPassword} className="ButtonRounded ButtonBlue">Reset Password</button>
                 <div className="ButtonRounded ButtonLightGray ButtonOutlineBlack ButtonTextLarge LoginGoogleBox CenterDivRow" onClick={clickedLoginWithGoogle} disabled={loading}>
-                    <img src={GoogleIcon} className="GoogleImage"/>
+                    <Image src={GoogleIcon} alt="..." className="GoogleImage"/>
                     <div>Login with Google</div>
                 </div>
             </form>

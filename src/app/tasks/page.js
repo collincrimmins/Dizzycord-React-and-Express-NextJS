@@ -8,6 +8,7 @@ import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import "../css/App.css"
 import "../css/Tasks.css"
 import {FadeLoader} from "react-spinners";
+import { useRouter } from 'next/navigation';
 // Firestore
 import {
   collection,
@@ -16,14 +17,13 @@ import {
   serverTimestamp 
 } from "firebase/firestore"
 
-export default function Page() {
+export default function TasksPage() {
   const {User} = useAuthContext()
   const [list, setList] = useState([])
   const [inputText, setInputText] = useState("")
   const [loading, setLoading] = useState(false)
   const ListsFirestore = collection(firestore, "Lists") // firestore.collection("Lists")
-
-  if (!User) { return }
+  const router = useRouter();
 
   // Start
   useEffect(() => {

@@ -1,6 +1,5 @@
 import React, {useState, useRef} from 'react'
 import { useAuthContext } from '../AuthContext'
-import GoogleIcon from "../images/Google.png"
 import "../css/Login.css"
 import "../css/App.css"
 

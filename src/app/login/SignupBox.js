@@ -12,7 +12,6 @@ export default function SignupBox({viewLogin}) {
     const [emptyFields, setEmptyFields] = useState([])
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
-    //const navigate = useNavigate()
     const router = useRouter();
 
     async function handleSubmit(e) {
@@ -50,7 +49,6 @@ export default function SignupBox({viewLogin}) {
         .then((userCredential) => {
             const user = userCredential.user;
             //console.log("Signed up: " + user.email)
-            //navigate("/")
             router.push('/')
         })
         .catch((error) => {

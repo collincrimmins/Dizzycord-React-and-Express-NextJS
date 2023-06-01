@@ -3,6 +3,7 @@
 import Navbar from "./Navbar"
 import { AuthProvider } from "./AuthContext"
 import "./css/App.css"
+import { useEffect } from "react";
 
 export const metadata = {
   title: "Test App",

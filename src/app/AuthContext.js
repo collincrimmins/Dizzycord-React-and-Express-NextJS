@@ -8,6 +8,8 @@ import {
 } from "firebase/auth"
 //import "firebase/compat/auth"
 import {getUsernameFromUID} from './functions/Firestore'
+import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 const AuthContext = React.createContext()
 
@@ -19,26 +21,46 @@ export function AuthProvider({children}) {
     const [User, setUser] = useState()
     const [username, setUsername] = useState("")
     const [loading, setLoading] = useState(true)
-    //const navigate = useNavigate()
+    const router = useRouter();
+    const pathname = usePathname();
+
+    // User Routes
+    let UserRoutes = [
+        "/",
+        "/chat",
+        "/settings",
+        "/tasks",
+    ]
+
+    // Check Route for User
+    useEffect(() => {
+        // Auth Context will Render every time a Page is Loaded
+        if (UserRoutes.find(route => route == pathname)) {
+            // Check if User Exists
+            if (!User) {
+                router.push('/login')
+            }
+        }
+    })
 
     // Auth Changed
     useEffect(() => {
         const updateUser = onAuthStateChanged(auth, (user) => {
+            // Set User
             setUser(user)
+            // Set Loading
             setLoading(false)
+            // Get Username
             if (user) {
-                //console.log("Logged in: " + user.email)
-            } else {
-                //console.log("No login credentials")
+                getMyUsername(user)
             }
         })
         return updateUser
     }, [])
 
-    // Initialization - Get Username
-    useEffect(() => {
-        if (!User) {return}
-        getUsernameFromUID(User.uid)
+    // Get Username
+    function getMyUsername(user) {
+        getUsernameFromUID(user.uid)
         .then(async (result) => {
             // Set Username
             if (result) {
@@ -47,7 +69,7 @@ export function AuthProvider({children}) {
         }).catch((error) => {
             console.log(error)
         })
-    }, [])
+    }
 
     // Sign Up
     function signup(email, password) {
@@ -70,7 +92,8 @@ export function AuthProvider({children}) {
     function logout() {
         return signOut(auth) // return auth.signOut()
         .then(() => {
-           // navigate("/")
+            // User Logged Out
+           router.push('/')
         })
         .catch((error) => {
             const errorCode = error.code;
@@ -106,6 +129,7 @@ export function AuthProvider({children}) {
         // User
         User,
         username,
+        setUsername,
         // Functions
         signup,
         login,

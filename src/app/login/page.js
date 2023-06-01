@@ -4,15 +4,25 @@
 import React, {useState, useEffect} from 'react'
 // Contexts
 import { useAuthContext } from '../AuthContext'
+import { useRouter } from 'next/navigation';
 // Components
 import LoginBox from "./LoginBox"
 import SignupBox from './SignupBox'
 import ResetBox from './ResetBox'
 
-export default function Page() {
+export default function LoginPage() {
   const {User} = useAuthContext()
   const [boxInView, setBoxInView] = useState("LoginBox")
-  //const navigate = useNavigate()
+  const router = useRouter();
+
+  // Check if Logged In
+  useEffect(() => {
+    if (User) {
+      //console.log("User: " + User.email)
+      navigateToHome()
+      return navigateToHome()
+    }
+  }, [])
 
   function viewSignup() {
     setBoxInView("SignupBox")
@@ -27,20 +37,12 @@ export default function Page() {
   }
 
   function navigateToHome() {
-    //navigate("/")
+    router.push('/')
   }
-
-  // Check if Logged In
-  useEffect(() => {
-    if (User) {
-      //console.log("User: " + User.email)
-      navigateToHome()
-      return navigateToHome()
-    }
-  }, [])
 
   // Login & Signup
   if (User) {return}
+  
   return (
     <main>
         {(boxInView == "LoginBox") &&

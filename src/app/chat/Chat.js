@@ -4,8 +4,8 @@ import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import { getUsernameFromUID } from '../functions/Firestore'
 import {firestore} from "../FirebaseSetup"
 import "../css/Chat.css"
-import DizzycordIcon from "../images/Dizzycord.png"
 import {FirestoreGetAllUsers} from '../functions/Firestore'
+import Image from 'next/image';
 // Firestore
 import {
     collection,
