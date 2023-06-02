@@ -6,10 +6,10 @@ import {
     signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail,
     onAuthStateChanged, updateEmail, updatePassword
 } from "firebase/auth"
-import {getUsernameFromUID} from './functions/FunctionsFirestore'
+import {getUsernameFromUID} from './library/FunctionsFirestore'
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
-import { LoadingFrame } from './functions/Library';
+import { LoadingFrame } from './library/Library';
 
 const AuthContext = React.createContext()
 

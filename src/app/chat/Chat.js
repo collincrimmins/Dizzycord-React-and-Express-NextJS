@@ -1,12 +1,12 @@
 import React, {useState, useEffect, useRef} from 'react'
 import { useAuthContext } from '../AuthContext'
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
-import { getUsernameFromUID } from '../functions/FunctionsFirestore'
+import { getUsernameFromUID } from '../library/FunctionsFirestore'
 import {firestore} from "../FirebaseSetup"
 import "../css/Chat.css"
-import {FirestoreGetArrayUserProfiles} from '../functions/FunctionsFirestore'
+import {FirestoreGetArrayUserProfiles} from '../library/FunctionsFirestore'
 import Image from 'next/image';
-import { LoadingFrame } from '../functions/Library'
+import { LoadingFrame } from '../library/Library'
 // Firestore
 import {
     collection,

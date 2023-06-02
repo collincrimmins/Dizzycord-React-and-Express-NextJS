@@ -8,7 +8,7 @@ import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import "../css/App.css"
 import "../css/Tasks.css"
 import { useRouter } from 'next/navigation';
-import { LoadingFrame } from '../functions/Library'
+import { LoadingFrame } from '../library/Library'
 // Firestore
 import {
   collection,
