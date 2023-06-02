@@ -6,10 +6,10 @@ import {
     signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail,
     onAuthStateChanged, updateEmail, updatePassword
 } from "firebase/auth"
-//import "firebase/compat/auth"
 import {getUsernameFromUID} from './functions/FunctionsFirestore'
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
+import { LoadingFrame } from './functions/Library';
 
 const AuthContext = React.createContext()
 
@@ -140,11 +140,11 @@ export function AuthProvider({children}) {
         updateUserPassword,
     }
 
+    // Render Loading Frame if Auth State is not Known
     return (
-        <>
-            <AuthContext.Provider value={contextValues}>
-                {!loading && children}
-            </AuthContext.Provider>
-        </>
+        <AuthContext.Provider value={contextValues}>
+            <LoadingFrame loading={loading}/>
+            {!loading && children}
+        </AuthContext.Provider>
     )
 }

@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from 'react'
 import {useAuthContext} from "..//AuthContext"
 import {firestore} from "../FirebaseSetup"
 import "../css/Chat.css"
-import {verifyTextInput, sleep} from '../functions/Functions'
+import {verifyTextInput, sleep} from '../functions/Library'
 // Firestore
 import {
     collection,

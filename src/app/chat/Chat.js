@@ -6,7 +6,7 @@ import {firestore} from "../FirebaseSetup"
 import "../css/Chat.css"
 import {FirestoreGetArrayUserProfiles} from '../functions/FunctionsFirestore'
 import Image from 'next/image';
-import {PulseLoader} from "react-spinners";
+import { LoadingFrame } from '../functions/Library'
 // Firestore
 import {
     collection,
@@ -234,27 +234,10 @@ export default function Chat() {
             scrollRef.current.scrollIntoView({behavior:"smooth"})
         }
     }
-
-    const LoadingFrame = () => {
-        if (loading) {
-            return (
-                <div className="LoadingFrame">
-                    <PulseLoader
-                        color={"#ffffff"}
-                        loading={loading}
-                        radius={25}
-                        height={45}
-                        width={10}
-                        margin={25}
-                    />
-                </div>
-            )
-        }
-    }
     
     return (
         <div className="Chatbox">
-            <LoadingFrame/>
+            <LoadingFrame loading={loading}/>
             <ul className="ChatboxScroll">
                 <div ref={scrollRef}></div>
                 {messages.map(msg => { 

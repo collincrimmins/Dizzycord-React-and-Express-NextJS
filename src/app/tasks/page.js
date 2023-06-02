@@ -7,8 +7,8 @@ import formatDistanceToNow from "date-fns/formatDistanceToNow"
 //import {doc, getDoc, getDocs, updateDoc, deleteDoc} from "firebase/firestore"
 import "../css/App.css"
 import "../css/Tasks.css"
-import {PulseLoader} from "react-spinners";
 import { useRouter } from 'next/navigation';
+import { LoadingFrame } from '../functions/Library'
 // Firestore
 import {
   collection,
@@ -36,6 +36,8 @@ export default function TasksPage() {
   }, [])
 
   const startTasksSubscription = () => {
+    // Loading
+    setLoading(true)
     // Get Snapshot
     const UserDoc = doc(ListsFirestore, User.uid)
     const TasksCollection = collection(UserDoc, "Tasks")
@@ -44,12 +46,15 @@ export default function TasksPage() {
       orderBy("time", "desc"),
     )
     return onSnapshot(Query, async (snapshot) => {
+      // Set List
       let List = []
       snapshot.docs.forEach((doc) => {
         let Item = {...doc.data(), id: doc.id}
         List.push(Item)
       })
       setList(List)
+      // Loading
+      setLoading(false)
     })
   }
 
@@ -142,26 +147,9 @@ export default function TasksPage() {
     )
   }
 
-  const LoadingFrame = () => {
-    if (loading) {
-        return (
-            <div className="LoadingFrame">
-                <PulseLoader
-                    color={"#ffffff"}
-                    loading={loading}
-                    radius={25}
-                    height={45}
-                    width={10}
-                    margin={25}
-                />
-            </div>
-        )
-    }
-}
-
   return (
     <main>
-      <LoadingFrame/>
+      <LoadingFrame loading={loading}/>
       <div className="BodyTasks">
         <div className="HeaderMain">My List</div>
         <div className="ContainerCentered">

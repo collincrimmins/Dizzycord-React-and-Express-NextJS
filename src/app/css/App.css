@@ -282,3 +282,16 @@
   border-radius: 4px;
   box-sizing: border-box;
 }
+
+/* LoadingFrame */
+
+.LoadingFrame {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0px;
+  background-color: rgba(0, 0, 0, 0.212);
+  height: 100%;
+  width: 100%;
+}
