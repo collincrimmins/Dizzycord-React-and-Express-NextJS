@@ -14,7 +14,7 @@ export default function Navbar() {
     const pathname = usePathname();
 
     // Button that will be Underlined when Page Active
-    function ViewPageButton({dest, children}) {
+    const ViewPageButton = ({dest, children}) => {
         // Check Page Active
         let pageActive = false
         if (dest === pathname) {

@@ -165,10 +165,10 @@ export default function Chat() {
             startAfter(messagesCursor),
             limit(PaginationSize)
         )
-        const QuerySnapshot = await getDocs(Query)
+        const snapshot = await getDocs(Query)
         // Iterate Messages
         let Messages = []
-        QuerySnapshot.forEach((snapshot) => {
+        snapshot.forEach((snapshot) => {
             // Add Messages
             Messages.push(getDocMessageFormat(snapshot))
         })
@@ -178,8 +178,8 @@ export default function Chat() {
         })
         // Set Cursor (Last Document)
         // Verify next Page Exists
-        if (QuerySnapshot.docs.length !== 0) {
-            setMessagesCursor(QuerySnapshot.docs[QuerySnapshot.docs.length - 1])
+        if (snapshot.docs.length !== 0) {
+            setMessagesCursor(snapshot.docs[snapshot.docs.length - 1])
         } else {
             setMessagesCursor(false)
         }

@@ -35,7 +35,12 @@ admin.initializeApp();
 // initializeApp();
 
 
-
+// Create Post
+exports.CreatePost = functions.https.onCall((Data, Context) => {
+  return new Promise(async function(resolve, reject) {
+    
+  })
+});
 
 // Get All Users Profile (for Chat)
 exports.FirestoreGetArrayUserProfiles = functions.https.onCall((Data, Context) => {
@@ -140,12 +145,18 @@ exports.RandomNumber = functions.https.onCall((Data, Context) => {
 exports.newUserSignup = functions.auth.user().onCreate((user) => {
   // Get Username
   const newUsername = "NewUser_" + Math.random().toString(36).substring(2, 10);
-  // Update User Public Database
-  return admin.firestore().collection("Users").doc(user.uid).set({
+  // Create "Users" Collection
+  admin.firestore().collection("Users").doc(user.uid).set({
     uid: user.uid,
     Username: newUsername,
     Photo: "https://play-lh.googleusercontent.com/6UgEjh8Xuts4nwdWzTnWH8QtLuHqRMUB7dp24JYVE2xcYzq4HA8hFfcAbU-R-PC_9uA1",
   });
+  // Create "Feeds" Collection
+  admin.firestore().collection("Profiles").doc(user.uid).set({
+    uid: user.uid,
+  });
+  // Return
+  return true;
 });
 
 

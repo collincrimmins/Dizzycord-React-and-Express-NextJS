@@ -2,14 +2,13 @@
 
 import React, {useState, useEffect, useRef} from 'react'
 import {useAuthContext} from "../Authentication"
-import {firestore} from "../FirebaseSetup"
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
-//import {doc, getDoc, getDocs, updateDoc, deleteDoc} from "firebase/firestore"
 import "../css/App.css"
 import "../css/Tasks.css"
 import { useRouter } from 'next/navigation';
 import { LoadingFrame } from '../library/Library'
 // Firestore
+import {firestore} from "../FirebaseSetup"
 import {
   collection,
   addDoc, deleteDoc, doc, updateDoc, getDoc, getDocs, onSnapshot,
