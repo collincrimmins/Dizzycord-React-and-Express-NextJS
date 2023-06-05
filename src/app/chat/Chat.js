@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react'
-import { useAuthContext } from '../AuthContext'
+import { useAuthContext } from '../Authentication'
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
-import { getUsernameFromUID } from '../library/FunctionsFirestore'
+import { firestoreGetUsernameFromUID } from '../library/FunctionsFirestore'
 import {firestore} from "../FirebaseSetup"
 import "../css/Chat.css"
 import {FirestoreGetArrayUserProfiles} from '../library/FunctionsFirestore'

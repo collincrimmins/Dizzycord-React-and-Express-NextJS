@@ -1,8 +1,8 @@
 "use client"
 
 import React, {useState, useEffect, useRef, useContext} from 'react';
-import {useAuthContext} from "../AuthContext"
-import {setFirestoreUsername, getUsernameFromUID} from '../library/FunctionsFirestore';
+import {useAuthContext} from "../Authentication"
+import {setFirestoreUsername} from '../library/FunctionsFirestore';
 import "../css/App.css"
 import "../css/Settings.css"
 import { useRouter } from 'next/navigation';

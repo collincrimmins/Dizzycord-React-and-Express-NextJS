@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react'
-import {useAuthContext} from "..//AuthContext"
+import {useAuthContext} from "../Authentication"
 import {firestore} from "../FirebaseSetup"
 import "../css/Chat.css"
 import {verifyTextInput, sleep} from '../library/Library'

@@ -1,7 +1,7 @@
 "use client"
 
 import Chat from "./Chat"
-import { useAuthContext } from '../AuthContext'
+import { useAuthContext } from '../Authentication'
 import { useRouter } from 'next/navigation';
 
 export default function ChatPage() {

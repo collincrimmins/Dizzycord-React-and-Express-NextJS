@@ -1,7 +1,7 @@
 "use client"
 
 import Navbar from "./Navbar"
-import { AuthProvider } from "./AuthContext"
+import { AuthProvider } from "./Authentication"
 import "./css/App.css"
 import { useEffect } from "react";
 

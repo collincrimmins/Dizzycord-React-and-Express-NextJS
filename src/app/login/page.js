@@ -3,7 +3,7 @@
 // React
 import React, {useState, useEffect} from 'react'
 // Contexts
-import { useAuthContext } from '../AuthContext'
+import { useAuthContext } from '../Authentication'
 import { useRouter } from 'next/navigation';
 // Components
 import LoginBox from "./LoginBox"

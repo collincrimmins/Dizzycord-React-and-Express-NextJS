@@ -26,7 +26,7 @@ export const FirestoreGetArrayUserProfiles = async (docs) => {
 }
 
 // Get Username from UID
-export const getUsernameFromUID = async (uid) => {
+export const firestoreGetUsernameFromUID = async (uid) => {
     const document = doc(firestore, "Users", uid);
     const docSnap = await getDoc(document);
     if (docSnap.exists()) {

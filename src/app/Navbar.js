@@ -3,10 +3,10 @@ import Link from 'next/link'
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
-import { useAuthContext } from './AuthContext'
+import { useAuthContext } from './Authentication'
 import "./css/App.css"
 import "./css/Navbar.css"
-import DizzycordIcon from "./images/DizzycordFullName.png"
+import DizzycordIcon from "./images/Dizzycord.png"
 
 export default function Navbar() {
     const {User, logout} = useAuthContext()
@@ -34,6 +34,8 @@ export default function Navbar() {
             <ul>
                 {User && (
                     <>
+                        <ViewPageButton dest="/users">Profile</ViewPageButton>
+                        <ViewPageButton dest="/chat">Chat</ViewPageButton>
                         <ViewPageButton dest="/tasks">Todos</ViewPageButton>
                         <ViewPageButton dest="/settings">Settings</ViewPageButton>
                         <button onClick={logout} className="ButtonRounded ButtonRed ButtonBold ButtonTextLarge AccountButton"> Logout </button>

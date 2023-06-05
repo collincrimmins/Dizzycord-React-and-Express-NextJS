@@ -6,7 +6,7 @@ import {
     signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail,
     onAuthStateChanged, updateEmail, updatePassword
 } from "firebase/auth"
-import {getUsernameFromUID} from './library/FunctionsFirestore'
+import {firestoreGetUsernameFromUID} from './library/FunctionsFirestore'
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import { LoadingFrame } from './library/Library';
@@ -24,24 +24,22 @@ export function AuthProvider({children}) {
     const router = useRouter();
     const pathname = usePathname();
 
-    // User Routes
+    // User Routes for User Paths
     let UserRoutes = [
         "/",
         "/chat",
+        "/users",
         "/settings",
         "/tasks",
     ]
-
-    // Check Route for User
     useEffect(() => {
         // Auth Context will Render every time a Page is Loaded
-        if (UserRoutes.find(route => route == pathname)) {
-            // Check if User Exists
-            if (!User) {
+        if (!User) {
+            //if (UserRoutes.find(route => route == pathname)) {
                 router.push('/login')
-            }
+            //}
         }
-    })
+    }, [User, pathname])
 
     // Auth Changed
     useEffect(() => {
@@ -60,7 +58,7 @@ export function AuthProvider({children}) {
 
     // Get Username
     function getMyUsername(user) {
-        getUsernameFromUID(user.uid)
+        firestoreGetUsernameFromUID(user.uid)
         .then(async (result) => {
             // Set Username
             if (result) {
@@ -93,7 +91,7 @@ export function AuthProvider({children}) {
         return signOut(auth) // return auth.signOut()
         .then(() => {
             // User Logged Out
-           router.push('/')
+            //router.push("/")
         })
         .catch((error) => {
             const errorCode = error.code;

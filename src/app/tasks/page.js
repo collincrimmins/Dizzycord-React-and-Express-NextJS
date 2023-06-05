@@ -1,7 +1,7 @@
 "use client"
 
 import React, {useState, useEffect, useRef} from 'react'
-import {useAuthContext} from "../AuthContext"
+import {useAuthContext} from "../Authentication"
 import {firestore} from "../FirebaseSetup"
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
 //import {doc, getDoc, getDocs, updateDoc, deleteDoc} from "firebase/firestore"
@@ -22,7 +22,7 @@ export default function TasksPage() {
   const [list, setList] = useState([])
   const [inputText, setInputText] = useState("")
   const [loading, setLoading] = useState(false)
-  const ListsFirestore = collection(firestore, "Lists") // firestore.collection("Lists")
+  const ListsFirestore = collection(firestore, "Lists")
   const router = useRouter();
 
   // Start

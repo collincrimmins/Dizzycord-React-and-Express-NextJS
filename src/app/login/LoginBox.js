@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react'
-import { useAuthContext } from '../AuthContext'
+import { useAuthContext } from '../Authentication'
 import "../css/Login.css"
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
