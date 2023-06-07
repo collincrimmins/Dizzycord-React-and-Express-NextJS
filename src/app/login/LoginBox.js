@@ -41,19 +41,19 @@ export default function LoginBox({viewSignup, viewResetPassword}) {
         setLoading(true)
         setError("")
         // Testing Mode (create Account on Login Button)
-        let TestingCreatedAccount = sessionStorage.getItem("TestingCreatedAccount")
-        if (process.env.NEXT_PUBLIC_DEV === "true" && !TestingCreatedAccount) {
-            signup(email, password) // await signup(emailRef.current.value, passwordRef.current.value)
-            .then((userCredential) => {
-                const user = userCredential.user;
-                router.push('/')
-            })
-            .finally(() => {
-                setLoading(false)
-                sessionStorage.setItem("TestingCreatedAccount", true)
-            })
-            return
-        }
+        // let TestingCreatedAccount = sessionStorage.getItem("TestingCreatedAccount")
+        // if (process.env.NEXT_PUBLIC_DEV === "true" && !TestingCreatedAccount) {
+        //     signup(email, password) // await signup(emailRef.current.value, passwordRef.current.value)
+        //     .then((userCredential) => {
+        //         const user = userCredential.user;
+        //         router.push('/')
+        //     })
+        //     .finally(() => {
+        //         setLoading(false)
+        //         sessionStorage.setItem("TestingCreatedAccount", true)
+        //     })
+        //     return
+        // }
         // Login
         login(email, password) // await login(emailRef.current.value, passwordRef.current.value)
         .then((userCredential) => {

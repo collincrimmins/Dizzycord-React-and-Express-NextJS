@@ -21,6 +21,7 @@ export const LoadingFrame = ({loading}) => {
 
 // Functions
 export const sleep = (ms) => {
+    // Use this line:
     // await sleep(1000);
     return new Promise(resolve => setTimeout(resolve, ms));
 }

@@ -6,10 +6,11 @@ import {
     signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail,
     onAuthStateChanged, updateEmail, updatePassword
 } from "firebase/auth"
-import {firestoreGetUsernameFromUID} from './library/FunctionsFirestore'
+import {firestoreGetUsernameFromUID, checkAPIReady} from './library/FunctionsFirestore'
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import { LoadingFrame } from './library/Library';
+import { sleep } from './library/Library';
 
 const AuthContext = React.createContext()
 
@@ -23,6 +24,42 @@ export function AuthProvider({children}) {
     const [loading, setLoading] = useState(true)
     const router = useRouter();
     const pathname = usePathname();
+
+    // Login Automatically for Testing
+    useEffect(() => {
+        async function createUser() {
+            // Yield for APIs Ready
+            let APIsLoaded = false
+            while (APIsLoaded === false) {
+                // const Ready = await checkAPIReady()
+                // if (Ready.data === true) { break 
+                checkAPIReady()
+                .then((result) => {
+                    if (result.data === true) {
+                        APIsLoaded = true
+                    }
+                })
+                await sleep(500);
+            }
+            // Create Account
+            let TestingCreatedAccount = sessionStorage.getItem("TestingCreatedAccount")
+            if (process.env.NEXT_PUBLIC_DEV === "true" && !TestingCreatedAccount) {
+                let email = "test@test.com"
+                let password = "123456"
+                signup(email, password)
+                .then((userCredential) => {
+                    //const user = userCredential.user;
+                    sleep(500)
+                    router.push("/")
+                })
+                .finally(() => {
+                    setLoading(false)
+                    sessionStorage.setItem("TestingCreatedAccount", true)
+                })
+            }
+        }
+        createUser()
+    }, [])
 
     // User Routes for User Paths
     let UserRoutes = [
@@ -71,7 +108,7 @@ export function AuthProvider({children}) {
 
     // Sign Up
     function signup(email, password) {
-        return createUserWithEmailAndPassword(auth, email, password) // return auth.createUserWithEmailAndPassword(email, password)
+        return createUserWithEmailAndPassword(auth, email, password) 
     }
 
     // Login
@@ -111,17 +148,17 @@ export function AuthProvider({children}) {
         return updateEmail(User, email)
     }
 
+    // Update Password
+    function updateUserPassword(password) {
+        return updatePassword(User, password)
+    }
+
     // Update Username
     /*function updateUsername(username) {
         return User.updateProfile({
             displayName: username,
         })
     }*/
-
-    // Update Password
-    function updateUserPassword(password) {
-        return updatePassword(User, password)
-    }
 
     const contextValues = {
         // User

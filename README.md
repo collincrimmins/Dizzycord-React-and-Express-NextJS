@@ -6,4 +6,4 @@ http://localhost:4000/
 # How to Run w/ Firebase
 npm install firebase
 firebase init
-npm run dev
+npm run
