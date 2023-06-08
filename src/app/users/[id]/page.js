@@ -28,7 +28,7 @@ export default function ProfilesPage({params}) {
 
   const uid = params.id
   const PaginationSize = 10
-
+  
   // Start
   useEffect(() => {
     // Loading
@@ -140,26 +140,22 @@ export default function ProfilesPage({params}) {
     )
   }
 
-  const PostSubmissionForm = () => {
-    return (
-      <div className="SubmitPostContainer">
-        <textarea 
-          placeholder="Type here..." 
-          className="TextArea"
-          onChange={(e) => setInputText(e.target.value)}
-          value={inputText}
-        />
-        <button onClick={addItem} className="ButtonRounded ButtonBlue ButtonOutlineBlack ButtonBold ButtonTextLarge">Post Tweet</button>
-      </div>
-    )
-  }
-
   return (
     <main>
       <LoadingFrame loading={loading}/>
       <div className="BodyUsers">
         <ProfileHeader/>
-        <PostSubmissionForm/>
+
+        <div className="SubmitPostContainer">
+          <textarea 
+            placeholder="Type here..." 
+            className="TextArea"
+            onChange={(e) => setInputText(e.target.value)}
+            value={inputText}
+          />
+          <button onClick={addItem} className="ButtonRounded ButtonBlue ButtonOutlineBlack ButtonBold ButtonTextLarge">Post Tweet</button>
+        </div>
+
         <ul className="TasksList">
           {list && list.map((v) => {
             return <Post key={v.id} info={v}/>

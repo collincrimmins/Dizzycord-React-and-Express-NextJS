@@ -31,30 +31,30 @@ export function AuthProvider({children}) {
             // Yield for APIs Ready
             let APIsLoaded = false
             while (APIsLoaded === false) {
-                // const Ready = await checkAPIReady()
-                // if (Ready.data === true) { break 
-                checkAPIReady()
-                .then((result) => {
-                    if (result.data === true) {
+                try {
+                    const Ready = await checkAPIReady()
+                    if (Ready.data === true) { 
                         APIsLoaded = true
                     }
-                })
+                } catch {}
                 await sleep(500);
             }
             // Create Account
             let TestingCreatedAccount = sessionStorage.getItem("TestingCreatedAccount")
-            if (process.env.NEXT_PUBLIC_DEV === "true" && !TestingCreatedAccount) {
+            if (User) {return}
+            if (TestingCreatedAccount) {return}
+            if (process.env.NEXT_PUBLIC_DEV === "true") {
+                sessionStorage.setItem("TestingCreatedAccount", true)
                 let email = "test@test.com"
                 let password = "123456"
                 signup(email, password)
                 .then((userCredential) => {
-                    //const user = userCredential.user;
+                    const user = userCredential.user;
                     sleep(500)
                     router.push("/")
                 })
                 .finally(() => {
                     setLoading(false)
-                    sessionStorage.setItem("TestingCreatedAccount", true)
                 })
             }
         }
