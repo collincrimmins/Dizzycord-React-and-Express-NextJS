@@ -1,10 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react'
-import { useAuthContext } from '../Authentication'
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import {firestore} from "../FirebaseSetup"
 import "../css/Chat.css"
-import {FirestoreGetArrayUserProfiles} from '../library/LibraryFirestore'
-import Image from 'next/image';
 import { LoadingFrameFill } from '../library/Library'
 // Firestore
 import {
@@ -12,19 +9,21 @@ import {
     addDoc, deleteDoc, doc, updateDoc, getDoc, getDocs, onSnapshot,
     query, where, orderBy, limit, startAfter,
     serverTimestamp 
-  } from "firebase/firestore"
+} from "firebase/firestore"
 
 import ChatInput from './ChatInput'
-
-const PaginationSize = 15
+import { RemoveDuplicates } from '@/app/library/Library'
+import { getProfiles } from '@/app/library/LibraryFirestore'
 
 export default function Chat() {
-    const {User} = useAuthContext()
-    const [messages, setMessages] = useState([])
-    const [messagesCursor, setMessagesCursor] = useState(null)
-    const [userProfiles, setUserProfiles] = useState([])
     const [loading, setLoading] = useState(false)
     const scrollRef = useRef()
+
+    const [list, setList] = useState([])
+    const [userProfiles, setUserProfiles] = useState([])
+    const [messagesCursor, setMessagesCursor] = useState(null)
+
+    const PaginationSize = 15
 
     // Initialization
     useEffect(() => {
@@ -38,80 +37,152 @@ export default function Chat() {
         }
     }, [])
 
-    // Messages Update
+    // Update Profiles on New Feed
     useEffect(() => {
-        // (Instant) Update Messages on New Snapshot Update & History Update
-        updateMessagesWithProfiles()
-        // (Async) Check if New Profiles Needed
-        runAsyncProfilesGetAll()
-    }, [messages])
+        // Check & Get new Profiles
+        getProfilesForList()
+    }, [list])
 
-    // UserProfiles Update
+    // Apply Profiles to New Feed
     useEffect(() => {
-        // (Instant) Update Messages on Profiles Update
-        updateMessagesWithProfiles()
+        // Update List with New Profiles
+        updateListWithProfiles()
     }, [userProfiles])
 
-    // Update Messages with User Profiles
-    const updateMessagesWithProfiles = () => {
-        // Update Messages with User Profiles
-        setMessages((prevMessages) => {
-            let newMessages = [...prevMessages]
-            let updatedMessages = false
-            newMessages.forEach((v) => {
-                let Profile = userProfiles.find((p) => v.uid === p.uid)
-                if (Profile) {
-                    if (v.Username === null || v.Username !== Profile.Username || v.Photo !== Profile.Photo) {
-                        updatedMessages = true
-                        v.Username = Profile.Username
-                        v.Photo = Profile.Photo
-                    }
+    // Get Profiles on any new List updates
+    const getProfilesForList = async () => {
+        // Check Length
+        if (list.length <= 0) {return}
+        // Apply Existing Profiles to List
+        updateListWithProfiles()
+        // Check for Missing Profiles in List
+        let newIdList = []
+        list.forEach((e) => {
+            // Check if Profile Applied
+            if (!e.Username) {
+                // Check if User Profile already Fetched
+                const ProfileAlreadyExists = userProfiles.find((q) => {
+                if (q.uid === e.uid) {
+                    return true
                 }
-            })
-            if (!updatedMessages) {
-                // Do not Trigger Update if Messages unchanged (infinite loop)
-                return prevMessages
-            } else {
-                // Update Messages
-                return newMessages
-            }
-        })
-    }
-
-    // Request Update of User Profiles (Error: Error Handling of Non-Existant User Lookups)
-    const runAsyncProfilesGetAll = async () => {
-        // Check if New Profiles Needed
-        let newUserIds = []
-        messages.forEach((v) => {
-            if (!v.Username) {
-                // Check if Added to Queue
-                if (!newUserIds.find((e) => e === v.uid)) {
-                    // Check if Profile needs to be Requested
-                    if (!userProfiles.find((e) => e.uid === v.uid)) {
-                        newUserIds.push(v.uid)
-                    }
-                }
-            }
-        })
-        // Check if API Call Required
-        if (newUserIds.length > 0) {
-            // Get User Profiles from API
-            const profileDocs = await FirestoreGetArrayUserProfiles(newUserIds)
-            // Apply to User Profiles
-            setUserProfiles((prevUserProfiles) => {
-                let newProfiles = [...prevUserProfiles]
-                // Add New Docs to Profiles
-                profileDocs.data.forEach((doc) => {
-                    const existingProfile = newProfiles.find((p) =>  p.uid === doc.uid)
-                    if (!existingProfile) {
-                        // Add New Profile
-                        newProfiles.push(doc)
-                    }
                 })
-                return newProfiles
-            })
+                // Add to Requested List
+                if (!ProfileAlreadyExists) {
+                newIdList.push(e.uid)
+                }
+            }
+        })
+        let newRequestedIds = RemoveDuplicates(newIdList)
+        // Get Profiles from List
+        if (newRequestedIds.length <= 0) {return}
+        const profiles = await getProfiles(newRequestedIds)
+        // Add New & Old to List
+        if (profiles) {
+        let NewList = [...userProfiles, ...profiles]
+            setUserProfiles(NewList)
         }
     }
+
+    // Add Profiles to List
+    const updateListWithProfiles = () => {
+        // Use "userProfiles" to update List
+        let NewList = [...list]
+        let Updated = false
+        NewList.forEach((e) => {
+            // Check if Username Exists
+            if (!e.Username) {
+                // Get Profile from UserProfiles
+                let profile = userProfiles.find((q) => e.uid === q.uid)
+                // Set Profile
+                if (profile) {
+                // Push Update
+                Updated = true
+                // Add Profile
+                e.Username = profile.Username
+                e.Photo = profile.Photo
+                }
+            }
+        })
+        // Set List
+        if (Updated) {
+            setList(NewList)
+        }
+    }
+
+    // Messages Update
+    // useEffect(() => {
+    //     // (Instant) Update Messages on New Snapshot Update & History Update
+    //     updateMessagesWithProfiles()
+    //     // (Async) Check if New Profiles Needed
+    //     runAsyncProfilesGetAll()
+    // }, [messages])
+
+    // // UserProfiles Update
+    // useEffect(() => {
+    //     // (Instant) Update Messages on Profiles Update
+    //     updateMessagesWithProfiles()
+    // }, [userProfiles])
+
+    // // Update Messages with User Profiles
+    // const updateMessagesWithProfiles = () => {
+    //     // Update Messages with User Profiles
+    //     setMessages((prevMessages) => {
+    //         let newMessages = [...prevMessages]
+    //         let updatedMessages = false
+    //         newMessages.forEach((v) => {
+    //             let Profile = userProfiles.find((p) => v.uid === p.uid)
+    //             if (Profile) {
+    //                 if (v.Username === null || v.Username !== Profile.Username || v.Photo !== Profile.Photo) {
+    //                     updatedMessages = true
+    //                     v.Username = Profile.Username
+    //                     v.Photo = Profile.Photo
+    //                 }
+    //             }
+    //         })
+    //         if (!updatedMessages) {
+    //             // Do not Trigger Update if Messages unchanged (infinite loop)
+    //             return prevMessages
+    //         } else {
+    //             // Update Messages
+    //             return newMessages
+    //         }
+    //     })
+    // }
+
+    // // Request Update of User Profiles (Error: Error Handling of Non-Existant User Lookups)
+    // const runAsyncProfilesGetAll = async () => {
+    //     // Check if New Profiles Needed
+    //     let newUserIds = []
+    //     messages.forEach((v) => {
+    //         if (!v.Username) {
+    //             // Check if Added to Queue
+    //             if (!newUserIds.find((e) => e === v.uid)) {
+    //                 // Check if Profile needs to be Requested
+    //                 if (!userProfiles.find((e) => e.uid === v.uid)) {
+    //                     newUserIds.push(v.uid)
+    //                 }
+    //             }
+    //         }
+    //     })
+    //     // Check if API Call Required
+    //     if (newUserIds.length > 0) {
+    //         // Get User Profiles from API
+    //         const profileDocs = await FirestoreGetArrayUserProfiles(newUserIds)
+    //         // Apply to User Profiles
+    //         setUserProfiles((prevUserProfiles) => {
+    //             let newProfiles = [...prevUserProfiles]
+    //             // Add New Docs to Profiles
+    //             profileDocs.data.forEach((doc) => {
+    //                 const existingProfile = newProfiles.find((p) =>  p.uid === doc.uid)
+    //                 if (!existingProfile) {
+    //                     // Add New Profile
+    //                     newProfiles.push(doc)
+    //                 }
+    //             })
+    //             return newProfiles
+    //         })
+    //     }
+    // }
 
     // Messages Subscription (Error: Instant spam-add of 50+ messages will hit 10 Snapshot Limit)
     const getMessagesSubscription = () => {
@@ -124,7 +195,7 @@ export default function Chat() {
             limit(PaginationSize)
         )
         return onSnapshot(Query, async (snapshot) => {
-            setMessages((prevMessages) => {
+            setList((prevMessages) => {
                 // Get Messages
                 let Messages = [...prevMessages]
                 // Set Cursor (on Initialization)
@@ -170,7 +241,7 @@ export default function Chat() {
             Messages.push(getDocMessageFormat(snapshot))
         })
         // Merge New & Old History
-        setMessages((prevMessages) => {
+        setList((prevMessages) => {
             return [...prevMessages, ...Messages]
         })
         // Set Cursor (Last Document)
@@ -237,10 +308,10 @@ export default function Chat() {
             <ul className="ChatboxScroll">
                 <LoadingFrameFill loading={loading}/>
                 <div ref={scrollRef}></div>
-                {messages.map(msg => { 
+                {list.map(msg => { 
                     return <ChatMessage key={msg.Id} data={msg}/>
                 })} 
-                {((messages.length >= PaginationSize) && (messagesCursor !== false)) 
+                {((list.length >= PaginationSize) && (messagesCursor !== false)) 
                 ? <LoadMoreButton/> : <></>}
                 {(messagesCursor === false) ? 
                 <EndOfHistoryLabel/> : <></>}

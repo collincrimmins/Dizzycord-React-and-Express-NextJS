@@ -30,7 +30,10 @@ export const getProfiles = async (uids) => {
         // Iterate Docs
         let List = []
         snapshot.docs.forEach((e) => {
+            // Add Fetch
             List.push(e.data())
+            // Print Fetch
+            //console.log("Fetched profile " + e.data().Username)
         })
         // Return Docs
         return List
@@ -52,16 +55,7 @@ export const getProfile = async (uid) => {
     } catch(error) {console.log(error)}
 }
 
-// Get Username from UID
-export const firestoreGetUsernameFromUID = async (uid) => {
-    const document = doc(firestore, "Users", uid);
-    const docSnap = await getDoc(document);
-    if (docSnap.exists()) {
-        return docSnap.data().Username
-    } else {
-        return ""
-    }
-}
+
 
 
 

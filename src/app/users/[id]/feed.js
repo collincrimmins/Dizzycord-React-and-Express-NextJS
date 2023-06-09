@@ -29,16 +29,19 @@ export default function ProfileFeed(info) {
 
   const PaginationSize = 15
 
-  const uid = info.uid
+  const profileuid = info.uid
 
   // Start
   useEffect(() => {
-    // Loading
-    setLoading(true)
-    // Get Feed
-    getProfileFeed()
-    // Loading
-    setLoading(false)
+    async function startPage() {
+      // Loading
+      setLoading(true)
+      // Get Feed
+      await getProfileFeed()
+      // Loading
+      setLoading(false)
+    }
+    startPage()
   }, [])
 
   // Update Profiles on New Feed
@@ -53,7 +56,7 @@ export default function ProfileFeed(info) {
     updateListWithProfiles()
   }, [userProfiles])
 
-  // Fill List w/ Profiles
+  // Get Profiles on any new List updates
   const getProfilesForList = async () => {
     // Check Length
     if (list.length <= 0) {return}
@@ -87,6 +90,7 @@ export default function ProfileFeed(info) {
     }
   }
 
+  // Add Profiles to List
   const updateListWithProfiles = () => {
     // Use "userProfiles" to update List
     let NewList = [...list]
@@ -124,7 +128,7 @@ export default function ProfileFeed(info) {
     setInputText("")
     // Save to Firestore
     //setLoading(true)
-    const UserDoc = doc(ProfilesFirestore, uid)
+    const UserDoc = doc(ProfilesFirestore, profileuid)
     const PostsCollection = collection(UserDoc, "Posts")
     addDoc(PostsCollection, {
       Text: Input,
@@ -142,7 +146,7 @@ export default function ProfileFeed(info) {
   // Get Feed
   const getProfileFeed = async () => {
     // Get Snapshot
-    const UserDoc = doc(ProfilesFirestore, uid)
+    const UserDoc = doc(ProfilesFirestore, profileuid)
     const PostsCollection = collection(UserDoc, "Posts")
     const Query = query(
       PostsCollection,
@@ -162,6 +166,10 @@ export default function ProfileFeed(info) {
   // Post
   const Post = ({info}) => {
     const {Text, Time, Username, Photo} = info
+    // Placeholder Profile
+    if (!Username) {
+      
+    }
     // Get Time
     let timeFormatted = ""
     if (Time) {
@@ -196,6 +204,19 @@ export default function ProfileFeed(info) {
     )
   }
 
+  const LoadMoreButton = () => {
+    if (loading) {return}
+    return (
+        <button className="ButtonRounded ButtonLightBlue">Load More...</button>
+    )
+}
+
+const EndOfHistoryLabel = () => {
+    return (
+        <div className="ContainerGray">End of Message History</div>
+    )
+}
+
   return (
     <>
      {/* Write Post */}
@@ -220,7 +241,9 @@ export default function ProfileFeed(info) {
               return <Post key={v.id} info={v}/>
               })
           )}
+          <LoadMoreButton/>
       </ul>
+      {/* Load More */}
     </>
   )
 }
