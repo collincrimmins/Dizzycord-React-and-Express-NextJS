@@ -1,12 +1,11 @@
 import React, {useState, useEffect, useRef} from 'react'
 import { useAuthContext } from '../Authentication'
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
-import { firestoreGetUsernameFromUID } from '../library/FunctionsFirestore'
 import {firestore} from "../FirebaseSetup"
 import "../css/Chat.css"
-import {FirestoreGetArrayUserProfiles} from '../library/FunctionsFirestore'
+import {FirestoreGetArrayUserProfiles} from '../library/LibraryFirestore'
 import Image from 'next/image';
-import { LoadingFrame } from '../library/Library'
+import { LoadingFrameFill } from '../library/Library'
 // Firestore
 import {
     collection,
@@ -23,9 +22,7 @@ export default function Chat() {
     const {User} = useAuthContext()
     const [messages, setMessages] = useState([])
     const [messagesCursor, setMessagesCursor] = useState(null)
-    const [userProfiles, setUserProfiles] = useState([
-        //{uid: "g37ZzS5dEZPBSmzyHbUA7zs8OIWH", Username: "Test"}
-    ])
+    const [userProfiles, setUserProfiles] = useState([])
     const [loading, setLoading] = useState(false)
     const scrollRef = useRef()
 
@@ -237,8 +234,8 @@ export default function Chat() {
     
     return (
         <div className="Chatbox">
-            <LoadingFrame loading={loading}/>
             <ul className="ChatboxScroll">
+                <LoadingFrameFill loading={loading}/>
                 <div ref={scrollRef}></div>
                 {messages.map(msg => { 
                     return <ChatMessage key={msg.Id} data={msg}/>

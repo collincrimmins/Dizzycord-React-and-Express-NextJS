@@ -6,7 +6,7 @@ import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import "../css/App.css"
 import "../css/Tasks.css"
 import { useRouter } from 'next/navigation';
-import { LoadingFrame } from '../library/Library'
+import { LoadingFrameFullScreen } from '../library/Library'
 // Firestore
 import {firestore} from "../FirebaseSetup"
 import {
@@ -148,7 +148,7 @@ export default function TasksPage() {
 
   return (
     <main>
-      <LoadingFrame loading={loading}/>
+      <LoadingFrameFullScreen loading={loading}/>
       <div className="BodyTasks">
         <div className="HeaderMain">My List</div>
         <div className="ContainerCentered">

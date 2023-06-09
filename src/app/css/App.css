@@ -285,13 +285,22 @@
 
 /* LoadingFrame */
 
-.LoadingFrame {
+.LoadingFrameFullScreen {
   position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
   top: 0px;
   background-color: rgba(0, 0, 0, 0.212);
+  height: 100%;
+  width: 100%;
+}
+
+.LoadingFrameFill {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0px;
   height: 100%;
   width: 100%;
 }

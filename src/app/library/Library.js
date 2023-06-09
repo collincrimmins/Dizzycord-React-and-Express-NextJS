@@ -1,13 +1,30 @@
-import {PulseLoader} from "react-spinners";
+import {PulseLoader, MoonLoader} from "react-spinners";
 import "../css/App.css"
 
 // Components
-export const LoadingFrame = ({loading}) => {
+export const LoadingFrameFullScreen = ({loading}) => {
     if (loading) {
         return (
-            <div className="LoadingFrame">
-                <PulseLoader
-                    color={"#ffffff"}
+            <div className="LoadingFrameFullScreen">
+                <MoonLoader
+                    color={"#4287f5"}
+                    loading={loading}
+                    radius={25}
+                    height={45}
+                    width={10}
+                    margin={25}
+                />
+            </div>
+        )
+    }
+}
+
+export const LoadingFrameFill = ({loading}) => {
+    if (loading) {
+        return (
+            <div className="LoadingFrameFill">
+                <MoonLoader
+                    color={"#4287f5"}
                     loading={loading}
                     radius={25}
                     height={45}
@@ -20,6 +37,16 @@ export const LoadingFrame = ({loading}) => {
 }
 
 // Functions
+export const RemoveDuplicates = (array) => {
+    let NewList = []
+    array.forEach((e) => {
+        if (!NewList.find((q) => q === e)) {
+            NewList.push(e)
+        }
+    })
+    return NewList
+}
+
 export const sleep = (ms) => {
     // Use this line:
     // await sleep(1000);

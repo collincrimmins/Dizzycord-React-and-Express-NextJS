@@ -20,6 +20,11 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    match /UsersPublic/{userId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
     match /Profiles/{userId}/Posts/{id} {
       allow read, write: if true;
     }

@@ -6,10 +6,10 @@ import {
     signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail,
     onAuthStateChanged, updateEmail, updatePassword
 } from "firebase/auth"
-import {firestoreGetUsernameFromUID, checkAPIReady} from './library/FunctionsFirestore'
+import {getProfile, checkAPIReady} from './library/LibraryFirestore'
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
-import { LoadingFrame } from './library/Library';
+import { LoadingFrameFullScreen } from './library/Library';
 import { sleep } from './library/Library';
 
 const AuthContext = React.createContext()
@@ -95,11 +95,11 @@ export function AuthProvider({children}) {
 
     // Get Username
     function getMyUsername(user) {
-        firestoreGetUsernameFromUID(user.uid)
+        getProfile(user.uid)
         .then(async (result) => {
             // Set Username
             if (result) {
-                setUsername(result)
+                setUsername(result.Username)
             }
         }).catch((error) => {
             console.log(error)
@@ -178,7 +178,7 @@ export function AuthProvider({children}) {
     // Render Loading Frame if Auth State is not Known
     return (
         <AuthContext.Provider value={contextValues}>
-            <LoadingFrame loading={loading}/>
+            <LoadingFrameFullScreen loading={loading}/>
             {!loading && children}
         </AuthContext.Provider>
     )

@@ -2,7 +2,7 @@
 
 import React, {useState, useEffect, useRef, useContext} from 'react';
 import {useAuthContext} from "../Authentication"
-import {setFirestoreUsername} from '../library/FunctionsFirestore';
+import {setFirestoreUsername} from '../library/LibraryFirestore';
 import "../css/App.css"
 import "../css/Settings.css"
 import { useRouter } from 'next/navigation';
