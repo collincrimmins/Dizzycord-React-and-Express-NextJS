@@ -49,7 +49,7 @@ export default function Chat() {
         updateListWithProfiles()
     }, [userProfiles])
 
-    // Get Profiles on any new List updates
+    // Request New Profiles on any new List updates
     const getProfilesForList = async () => {
         // Check Length
         if (list.length <= 0) {return}
@@ -68,7 +68,7 @@ export default function Chat() {
                 })
                 // Add to Requested List
                 if (!ProfileAlreadyExists) {
-                newIdList.push(e.uid)
+                  newIdList.push(e.uid)
                 }
             }
         })
@@ -95,11 +95,11 @@ export default function Chat() {
                 let profile = userProfiles.find((q) => e.uid === q.uid)
                 // Set Profile
                 if (profile) {
-                // Push Update
-                Updated = true
-                // Add Profile
-                e.Username = profile.Username
-                e.Photo = profile.Photo
+                    // Push Update
+                    Updated = true
+                    // Add Profile
+                    e.Username = profile.Username
+                    e.Photo = profile.Photo
                 }
             }
         })

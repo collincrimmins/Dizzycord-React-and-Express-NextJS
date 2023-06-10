@@ -21,13 +21,16 @@ import { RemoveDuplicates } from '@/app/library/Library'
 export default function ProfileFeed(info) {
   const {User} = useAuthContext()
   const [loading, setLoading] = useState(false)
+  const [writePostLoading, setWritePostLoading] = useState(false)
   const [inputText, setInputText] = useState("")
   const ProfilesFirestore = collection(firestore, "Profiles")
 
   const [list, setList] = useState([])
   const [userProfiles, setUserProfiles] = useState([])
+  const [listCursor, setListCursor] = useState(null)
+  const [listCursorEnd, setListCursorEnd] = useState(false)
 
-  const PaginationSize = 15
+  const PaginationSize = 5
 
   const profileuid = info.uid
 
@@ -37,7 +40,7 @@ export default function ProfileFeed(info) {
       // Loading
       setLoading(true)
       // Get Feed
-      await getProfileFeed()
+      await getNextProfileFeed()
       // Loading
       setLoading(false)
     }
@@ -56,7 +59,7 @@ export default function ProfileFeed(info) {
     updateListWithProfiles()
   }, [userProfiles])
 
-  // Get Profiles on any new List updates
+  // Request New Profiles on any new List updates
   const getProfilesForList = async () => {
     // Check Length
     if (list.length <= 0) {return}
@@ -116,10 +119,84 @@ export default function ProfileFeed(info) {
     }
   }
 
+  // Create Standard Format for Documents
+  const createStandardDoc = (doc) => {
+    return {...doc.data(), id: doc.id}
+  }
+
+  // Get Feed
+  const getNextProfileFeed = async () => {
+    // Get Snapshot
+    const UserDoc = doc(ProfilesFirestore, profileuid)
+    const PostsCollection = collection(UserDoc, "Posts")
+    let Query
+    if (list.length == 0) {
+      Query = query(
+        PostsCollection,
+        orderBy("Time", "desc"),
+        limit(PaginationSize)
+      )
+    } else {
+      Query = query(
+        PostsCollection,
+        orderBy("Time", "desc"),
+        startAfter(listCursor),
+        limit(PaginationSize)
+      )
+    }
+    const snapshot = await getDocs(Query)
+    // Create List
+    let List = []
+    snapshot.docs.forEach((doc) => {
+      let Item = createStandardDoc(doc)
+      List.push(Item)
+    })
+    // Set List
+    let NewList = [...list, ...List]
+    setList(NewList)
+    // Set Cursor to Last Document from Firestore
+    if (snapshot.docs.length > 0) {
+      setListCursor(snapshot.docs[snapshot.docs.length - 1])
+    } else {
+      setListCursorEnd(true)
+    }
+  }
+
+  // Add Newly Added Post to Feed
+  const getJustAddedPost = async (docRef) => {
+    try {
+      // Get Just Written Post
+      const docSnap = await getDoc(docRef)
+      if (docSnap.exists()) {
+        // Set List
+        let Item = createStandardDoc(docSnap)
+        let NewList = [Item, ...list]
+        setList(NewList)
+      }
+    } catch(error) {console.log(error)}
+    // Loading
+    setWritePostLoading(false)
+  }
+
+  // Load More Button
+  const LoadMoreButton = () => {
+    if (loading) {return}
+    return (
+        <button onClick={getNextProfileFeed} className="ButtonRounded ButtonLightBlue">Load More...</button>
+    )
+  }
+
+  // End of History Frame
+  const EndOfHistoryLabel = () => {
+      return (
+          <div className="ContainerGray">End of Message History</div>
+      )
+  }
+
   // Write Post
   function addNewPost(e) {
     e.preventDefault()
-    //if (loading) {return}
+    if (writePostLoading) {return}
     // Check Fields
     let Input = inputText
     if (Input === "") {return}
@@ -127,7 +204,7 @@ export default function ProfileFeed(info) {
     // Clear Input Box
     setInputText("")
     // Save to Firestore
-    //setLoading(true)
+    setWritePostLoading(true)
     const UserDoc = doc(ProfilesFirestore, profileuid)
     const PostsCollection = collection(UserDoc, "Posts")
     addDoc(PostsCollection, {
@@ -135,32 +212,10 @@ export default function ProfileFeed(info) {
       Time: serverTimestamp(),
       uid: User.uid,
     })
-    .finally(() => {
-      // Loading
-      //setLoading(false)
-      // Refresh Feed
-      getProfileFeed()
+    .then((docRef) => {
+      // Get Doc to Add to Feed
+      getJustAddedPost(docRef)
     })
-  }
-
-  // Get Feed
-  const getProfileFeed = async () => {
-    // Get Snapshot
-    const UserDoc = doc(ProfilesFirestore, profileuid)
-    const PostsCollection = collection(UserDoc, "Posts")
-    const Query = query(
-      PostsCollection,
-      orderBy("Time", "desc"),
-      limit(PaginationSize)
-    )
-    const snapshot = await getDocs(Query)
-    // Set List
-    let List = []
-    snapshot.docs.forEach((doc) => {
-      let Item = {...doc.data(), id: doc.id}
-      List.push(Item)
-    })
-    setList(List)
   }
 
   // Post
@@ -172,10 +227,12 @@ export default function ProfileFeed(info) {
     }
     // Get Time
     let timeFormatted = ""
+    let timeFormatted2 = ""
     if (Time) {
         let date = new Date(Time.seconds * 1000)
         let timeFormattedClassic =  (date.getMonth() + 1) + "/" + (date.getDate())
         timeFormatted = formatDistanceToNow(date, {addSuffix: true})
+        timeFormatted2 = "(" + timeFormattedClassic + ")"
     }
     // Post
     return (
@@ -197,35 +254,22 @@ export default function ProfileFeed(info) {
             </div>
           </div>
           <div className="CheckboxTimeLabel">
-            <label><i>{timeFormatted}</i></label>
+            <label><i>{timeFormatted} {timeFormatted2}</i></label>
           </div>
         </div>
       </div>
     )
   }
 
-  const LoadMoreButton = () => {
-    if (loading) {return}
-    return (
-        <button className="ButtonRounded ButtonLightBlue">Load More...</button>
-    )
-}
-
-const EndOfHistoryLabel = () => {
-    return (
-        <div className="ContainerGray">End of Message History</div>
-    )
-}
-
   return (
     <>
-     {/* Write Post */}
+      {/* Write Post */}
       <div className="SubmitPostContainer">
           <textarea 
-          placeholder="Type here..." 
-          className="TextArea"
-          onChange={(e) => setInputText(e.target.value)}
-          value={inputText}
+            placeholder="Type here..." 
+            className="TextArea"
+            onChange={(e) => setInputText(e.target.value)}
+            value={inputText}
           />
           <button onClick={addNewPost} className="ButtonRounded ButtonBlue ButtonOutlineBlack ButtonBold ButtonTextLarge">Post Tweet</button>
       </div>
@@ -241,9 +285,12 @@ const EndOfHistoryLabel = () => {
               return <Post key={v.id} info={v}/>
               })
           )}
-          <LoadMoreButton/>
+          {/* Load More */}
+          {((list.length >= PaginationSize) && (listCursorEnd !== true)) 
+          ? <LoadMoreButton/> : <></>}
+          {(listCursorEnd === true) ? 
+          <EndOfHistoryLabel/> : <></>}
       </ul>
-      {/* Load More */}
     </>
   )
 }
