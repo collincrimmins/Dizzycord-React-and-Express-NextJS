@@ -125,17 +125,9 @@ export function AuthProvider({children}) {
 
     // Logout
     async function logout() {
-        return signOut(auth)
-        .then(() => {
-            // User Logged Out
-            //router.push("/")
-        })
-        .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            //console.log(errorCode)
-            //console.log(errorMessage)
-        })
+        try {
+            await signOut(auth);
+        } catch (error) {console.log(error)}
     }
     
     // Reset Password
@@ -152,13 +144,6 @@ export function AuthProvider({children}) {
     function updateUserPassword(password) {
         return updatePassword(User, password)
     }
-
-    // Update Username
-    /*function updateUsername(username) {
-        return User.updateProfile({
-            displayName: username,
-        })
-    }*/
 
     const contextValues = {
         // User

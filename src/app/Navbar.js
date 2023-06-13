@@ -17,8 +17,6 @@ export default function Navbar() {
 
     const [dropdownActive, setDropdownActive] = useState(true)
 
-    // TODO: Make User Icon w/ Photo & Username (and dropdown to settings & logout)
-
     // Button that will be Underlined when Page Active
     const ViewPageButton = ({dest, children}) => {
         // Check Page Active
@@ -34,14 +32,19 @@ export default function Navbar() {
 
     function clickedAccountButton () {
         if (dropdownActive) {
+            // Hide Menu
             setDropdownActive(false)
         } else {
+            // Enable Menu
             setDropdownActive(true)
         }
     }
     
     function navigateToSettings() {
+        // Navigate
         router.push("/settings")
+        // Hide Menu
+        setDropdownActive(false)
     }
 
     return (
@@ -75,8 +78,10 @@ export default function Navbar() {
                 <div className="DropdownMenu">
                     <div className="DropdownMenuHeader">Account</div>
                     <ul>
+                        <div className="MenuDivider"/>
                         <button onClick={navigateToSettings}>Settings</button>
-                        <button onClick={logout}>Logout</button>
+                        <div className="MenuDivider"/>
+                        <button onClick={logout}>Sign Out</button>
                     </ul>
                 </div>
             )}

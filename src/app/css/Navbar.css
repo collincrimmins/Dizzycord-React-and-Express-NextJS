@@ -94,15 +94,18 @@
 
 .DropdownMenu {
   width: 140px;
-  height: 100px;
+  height: auto;
   background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(156, 156, 156);
   box-shadow: rgba(100, 100, 111, 0.2) 2px 2px 20px 2px;
   border-radius: 5px;
   /* Offset */
   margin-top: 60px;
   /* Position */
   position: absolute;
-  
+  left: auto;
+  right: 10px;
+  padding-right: 10px;
   /* Children */
   display: flex;
   flex-direction: column;
@@ -113,13 +116,26 @@
   font-weight: bold;
   justify-content: center;
   align-items: center;
+  text-align: center;
+  /* Padding */
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .DropdownMenu button {
   background-color: transparent;
-  border: 1px solid rgb(235, 235, 235);
+  border: 0px;
+  /* border: 1px solid rgb(235, 235, 235); */
   height: 100%;
   width: 100%;
+  /* Padding */
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.MenuDivider {
+  height: 2px;
+  background-color: rgb(235, 235, 235);
 }
 
 .DropdownMenu ul {
@@ -128,10 +144,12 @@
   list-style: none;
   gap: 0px;
   padding: 0px;
+  padding-bottom: 5px;
 }
 
 .DropdownMenu ul button:hover {
   text-decoration: underline;
+  cursor: pointer;
 }
 
 /* Navbar */
