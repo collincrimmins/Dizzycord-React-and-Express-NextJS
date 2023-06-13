@@ -48,7 +48,7 @@ export default function ProfilesPage({params}) {
     return (
       <div className="ProfileHeader">
         <div className="ProfileInfo">
-          <img src={profileInfo.Photo} className="ProfilePhoto"/>
+          <img src={profileInfo.Photo} className="ProfilePhoto ProfilePhotoSize"/>
           <div className="ProfileUsername">{profileInfo.Username}</div>
         </div>
         <div className="ProfileBio">

@@ -3,7 +3,7 @@
   width: 100%;
   height: 50px;
   top: 0;
-  background-color: #333;
+  background-color: #e2e2e2;
   color: white;
   display: flex;
   justify-content: space-between;
@@ -24,7 +24,6 @@
   font-size: 2rem;
   font-weight: bolder;
   display: flex;
-  color: inherit;
   text-decoration: none;
   height: 100%;
   display: flex;
@@ -34,9 +33,9 @@
 }
 
 .NavbarItem {
+  color: rgb(0, 0, 0);
   font-size: 1.25rem;
   margin: auto;
-  color: inherit;
   text-decoration: none;
   height: 100%;
   display: flex;
@@ -49,11 +48,12 @@
   height: 60%;
   margin: auto;
   /* Box */
-  color: rgb(0, 0, 0);
-  background-color: rgb(214, 214, 214);
+  color: rgb(255, 255, 255);
+  background-color: rgb(104, 104, 104);
   border-radius: 6px;
   border: none;
   cursor: pointer;
+  font-weight: bold;
   /* Padding */
   padding-top: 5px;
   padding-bottom: 5px;
@@ -62,19 +62,85 @@
   /* Width */
   width: auto;
 }
-  
-.AccountButton {
+
+/* Account Frame */
+
+.AccountFrame {
   font-size: 1.25rem;
   font-weight: bold;
   height: 80%;
+  border: 0px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 5px;
+  /* Box */
+  display: flex;
+  flex-direction: row;
   margin: auto;
+  align-items: center;
+  gap: 10px;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  /* Cursor */
+  cursor: pointer;
 }
 
+.AccountProfileIcon {
+  height: 100%;
+  width: auto;
+}
+
+/* Drop Down */
+
+.DropdownMenu {
+  width: 140px;
+  height: 100px;
+  background-color: rgb(255, 255, 255);
+  box-shadow: rgba(100, 100, 111, 0.2) 2px 2px 20px 2px;
+  border-radius: 5px;
+  /* Offset */
+  margin-top: 60px;
+  /* Position */
+  position: absolute;
+  
+  /* Children */
+  display: flex;
+  flex-direction: column;
+  padding: 0px;
+}
+
+.DropdownMenuHeader {
+  font-weight: bold;
+  justify-content: center;
+  align-items: center;
+}
+
+.DropdownMenu button {
+  background-color: transparent;
+  border: 1px solid rgb(235, 235, 235);
+  height: 100%;
+  width: 100%;
+}
+
+.DropdownMenu ul {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  gap: 0px;
+  padding: 0px;
+}
+
+.DropdownMenu ul button:hover {
+  text-decoration: underline;
+}
+
+/* Navbar */
+
 .Navbar ul {
-  margin-right: 5px;
   list-style: none;
   display: flex;
   gap: 15px;
+  padding-right: 10px;
 }
 
 .NavbarItem:hover {

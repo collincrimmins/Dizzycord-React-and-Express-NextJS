@@ -124,8 +124,8 @@ export function AuthProvider({children}) {
     }
 
     // Logout
-    function logout() {
-        return signOut(auth) // return auth.signOut()
+    async function logout() {
+        return signOut(auth)
         .then(() => {
             // User Logged Out
             //router.push("/")

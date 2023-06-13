@@ -25,15 +25,9 @@
     gap: 10px;
 }
 
-.ProfilePhoto {
+.ProfilePhotoSize {
+    width: 50px;
     height: 50px;
-    width: auto;
-    background-color: blue;
-    background: rgb(185, 185, 185);
-    border: 5px solid rgb(255, 255, 255);
-    border-radius: 100%;
-    /* Adjust Border to fit inside */
-    box-sizing: border-box;
 }
 
 .ProfileUsername {

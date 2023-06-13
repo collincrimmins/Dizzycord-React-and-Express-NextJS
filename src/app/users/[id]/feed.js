@@ -17,14 +17,16 @@ import {
 import { getProfiles } from '@/app/library/LibraryFirestore'
 import { sleep } from '@/app/library/Library'
 import { RemoveDuplicates } from '@/app/library/Library'
+import PlaceholderImage from "@/app/images/Google.png"
 
 export default function ProfileFeed(info) {
   const {User} = useAuthContext()
-  const [loading, setLoading] = useState(false)
-  const [writePostLoading, setWritePostLoading] = useState(false)
-  const [inputText, setInputText] = useState("")
   const ProfilesFirestore = collection(firestore, "Profiles")
 
+  const [writePostLoading, setWritePostLoading] = useState(false)
+  const [inputText, setInputText] = useState("")
+
+  const [loading, setLoading] = useState(false)
   const [list, setList] = useState([])
   const [userProfiles, setUserProfiles] = useState([])
   const [listCursor, setListCursor] = useState(null)
@@ -131,12 +133,14 @@ export default function ProfileFeed(info) {
     const PostsCollection = collection(UserDoc, "Posts")
     let Query
     if (list.length == 0) {
+      // Start at 0
       Query = query(
         PostsCollection,
         orderBy("Time", "desc"),
         limit(PaginationSize)
       )
     } else {
+      // Start at Pagination
       Query = query(
         PostsCollection,
         orderBy("Time", "desc"),
@@ -220,10 +224,13 @@ export default function ProfileFeed(info) {
 
   // Post
   const Post = ({info}) => {
-    const {Text, Time, Username, Photo} = info
+    let {Text, Time, Username, Photo} = info
     // Placeholder Profile
     if (!Username) {
       
+    }
+    if (!Photo) {
+      Photo = PlaceholderImage
     }
     // Get Time
     let timeFormatted = ""
@@ -239,7 +246,7 @@ export default function ProfileFeed(info) {
       <div className="PostContainer">
         {/* Top */}
         <div className="PostTop">
-          <img src={Photo} className="ProfilePhoto"/>
+          <img src={Photo} className="ProfilePhoto ProfilePhotoSize"/>
           <div className="PostNameHeader">
             {Username}
           </div>
@@ -286,10 +293,16 @@ export default function ProfileFeed(info) {
               })
           )}
           {/* Load More */}
-          {((list.length >= PaginationSize) && (listCursorEnd !== true)) 
-          ? <LoadMoreButton/> : <></>}
-          {(listCursorEnd === true) ? 
-          <EndOfHistoryLabel/> : <></>}
+          {((list.length >= PaginationSize) && (listCursorEnd !== true)) ? 
+            <LoadMoreButton/> 
+            : 
+            <></>
+          }
+          {(listCursorEnd === true && list.length > 0) ? 
+            <EndOfHistoryLabel/> 
+            : 
+            <></>
+          }
       </ul>
     </>
   )

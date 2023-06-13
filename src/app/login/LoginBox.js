@@ -3,7 +3,7 @@ import { useAuthContext } from '../Authentication'
 import "../css/Login.css"
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import GoogleIcon from "../images/Google.png"
+import GoogleIcon from "@/app/images/Google.png"
 
 export default function LoginBox({viewSignup, viewResetPassword}) {
     const {login, loginWithGoogle, signup} = useAuthContext()

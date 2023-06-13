@@ -7,16 +7,20 @@
   gap: 0;
 }
 
-.firebase-emulator-warning {
-  opacity: 0;
-  pointer-events: none;
-}
-
 .MainHeaderOffset {
   /* Body */
   background-color: rgba(148, 148, 148, 0);
   /* Border for Header */
   border-top: 50px solid rgba(255, 255, 255, 0);
+}
+
+/* Profile */
+
+.ProfilePhoto {
+  border: 0px;
+  border-radius: 100%;
+  /* Adjust Border to fit inside */
+  box-sizing: border-box;
 }
 
 /* Generic */
@@ -303,4 +307,11 @@
   top: 0px;
   height: 100%;
   width: 100%;
+}
+
+/* Misc */
+
+.firebase-emulator-warning {
+  opacity: 0;
+  pointer-events: none;
 }

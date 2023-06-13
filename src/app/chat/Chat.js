@@ -276,7 +276,7 @@ export default function Chat() {
         // Return
         return (
             <div className="ChatItem">
-                <img src={Photo} className="ChatItemImage"/>
+                <img src={Photo} className="ProfilePhoto ProfilePhotoSize"/>
                 <div>
                     <div><b>{Username}</b>   <i className="ChatItemTimeText">{timeFormatted}</i></div>
                     <div>{Text}</div>

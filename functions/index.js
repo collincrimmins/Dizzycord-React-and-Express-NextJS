@@ -69,34 +69,34 @@ exports.CreatePost = onCall((Data, Context) => {
 // });
 
 // Get All Users Profile (for Chat)
-exports.FirestoreGetArrayUserProfiles = functions.https.onCall((Data, Context) => {
-  return new Promise(async function(resolve, reject) {
-    // Get User
-    const User = Context.auth
-    if (!User) {
-      return resolve({status: "error", message: "You are not Logged in."})
-    }
-    // Get Doc Refs
-    let requestDocs = []
-    Data.forEach((v) => {
-      const docRef = admin.firestore().collection("Users").doc(v)
-      requestDocs.push(docRef)
-    })
-    // Get All
-    admin.firestore().getAll(...requestDocs)
-    .then((result) => {
-      // Get Data from Doc Snapshots
-      let returnDocs = []
-      result.forEach((v) => {
-        returnDocs.push(v.data())
-      })
-      return resolve(returnDocs)
-    })
-    .catch((error) => {
-      return resolve({status: "error", message: "Error getting documents."})
-    })
-  })
-});
+// exports.FirestoreGetArrayUserProfiles = functions.https.onCall((Data, Context) => {
+//   return new Promise(async function(resolve, reject) {
+//     // Get User
+//     const User = Context.auth
+//     if (!User) {
+//       return resolve({status: "error", message: "You are not Logged in."})
+//     }
+//     // Get Doc Refs
+//     let requestDocs = []
+//     Data.forEach((v) => {
+//       const docRef = admin.firestore().collection("Users").doc(v)
+//       requestDocs.push(docRef)
+//     })
+//     // Get All
+//     admin.firestore().getAll(...requestDocs)
+//     .then((result) => {
+//       // Get Data from Doc Snapshots
+//       let returnDocs = []
+//       result.forEach((v) => {
+//         returnDocs.push(v.data())
+//       })
+//       return resolve(returnDocs)
+//     })
+//     .catch((error) => {
+//       return resolve({status: "error", message: "Error getting documents."})
+//     })
+//   })
+// });
 
 // Set Username 
 exports.SetUsername = functions.https.onCall((Data, Context) => {

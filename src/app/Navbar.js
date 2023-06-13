@@ -6,12 +6,18 @@ import { usePathname } from 'next/navigation';
 import { useAuthContext } from './Authentication'
 import "./css/App.css"
 import "./css/Navbar.css"
-import DizzycordIcon from "./images/Dizzycord.png"
+import DizzycordIcon from "@/app/images/Dizzycord.png"
+import PlaceholderImage from "@/app/images/PlaceholderImage.png"
+import GoogleImage from "@/app/images/Google.png"
 
 export default function Navbar() {
     const {User, logout} = useAuthContext()
     const router = useRouter();
     const pathname = usePathname();
+
+    const [dropdownActive, setDropdownActive] = useState(true)
+
+    // TODO: Make User Icon w/ Photo & Username (and dropdown to settings & logout)
 
     // Button that will be Underlined when Page Active
     const ViewPageButton = ({dest, children}) => {
@@ -26,27 +32,54 @@ export default function Navbar() {
         )
     }
 
+    function clickedAccountButton () {
+        if (dropdownActive) {
+            setDropdownActive(false)
+        } else {
+            setDropdownActive(true)
+        }
+    }
+    
+    function navigateToSettings() {
+        router.push("/settings")
+    }
+
     return (
-        <nav className="Navbar">
-            <Link href="/" className="HomeNavbarItem">   
-                <Image src={DizzycordIcon} alt="..." className="AppHeaderLogo" />
-            </Link>
-            <ul>
-                {User && (
-                    <>
-                        <ViewPageButton dest="/users">Profile</ViewPageButton>
-                        <ViewPageButton dest="/chat">Chat</ViewPageButton>
-                        <ViewPageButton dest="/tasks">Todos</ViewPageButton>
-                        <ViewPageButton dest="/settings">Settings</ViewPageButton>
-                        <button onClick={logout} className="ButtonRounded ButtonRed ButtonBold ButtonTextLarge AccountButton"> Logout </button>
-                    </>
-                )}
-                {!User && (
-                    <Link href="/login" className="HomeNavbarItem">
-                        <button className="ButtonRounded ButtonRed ButtonBold ButtonTextLarge AccountButton"> Login </button>
-                    </Link>
-                )}
-            </ul>
-        </nav>
+        <>
+            <nav className="Navbar">
+                <Link href="/" className="HomeNavbarItem">   
+                    <Image src={DizzycordIcon} alt="..." className="AppHeaderLogo" />
+                </Link>
+                <ul>
+                    {User && (
+                        <>
+                            <ViewPageButton dest="/users">Profile</ViewPageButton>
+                            <ViewPageButton dest="/chat">Chat</ViewPageButton>
+                            {/* <ViewPageButton dest="/tasks">Todos</ViewPageButton> */}
+                            {/* <ViewPageButton dest="/settings">Settings</ViewPageButton> */}
+                            {/* <button onClick={logout} className="ButtonRounded ButtonRed ButtonBold ButtonTextLarge AccountButton"> Logout </button> */}
+                            <button onClick={clickedAccountButton} className="AccountFrame">
+                                <Image src={GoogleImage} alt="..." className="ProfilePhoto AccountProfileIcon" />
+                                User
+                            </button>
+                        </>
+                    )}
+                    {!User && (
+                        <Link href="/login" className="HomeNavbarItem">
+                            <button className="ButtonRounded ButtonRed ButtonBold ButtonTextLarge AccountButton"> Login </button>
+                        </Link>
+                    )}
+                </ul>
+            </nav>
+            {dropdownActive && (
+                <div className="DropdownMenu">
+                    <div className="DropdownMenuHeader">Account</div>
+                    <ul>
+                        <button onClick={navigateToSettings}>Settings</button>
+                        <button onClick={logout}>Logout</button>
+                    </ul>
+                </div>
+            )}
+        </>
     )
 }

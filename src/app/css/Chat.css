@@ -28,9 +28,8 @@
     /* Box */
     display: flex;
     background-color: #f1f1f1;
-    border: 1px solid rgb(0, 0, 0);
+    border: 1px solid rgb(221, 221, 221);
     box-shadow: 0px 0px 2px black;
-    border-radius: 10px;
     box-sizing: border-box;
     /* Font */
     font-size: 1.25rem;
@@ -39,9 +38,13 @@
     padding: 5px;
 }
 
-.ChatItemImage {
+/* .ChatItemImage {
     width: 50px;
     object-fit: scale-down;
+} */
+
+.ProfilePhotoSize {
+    height: 100%;
 }
 
 .ChatItemTimeText {
@@ -54,7 +57,7 @@
 .ChatFooterBox {
     gap: 10px;
     height: 50px;
-    background-color: #333;
+    background-color: #e2e2e2;
     display: flex;
     flex-direction: row;
     padding-top: 10px;
@@ -68,7 +71,7 @@
 .ChatInputForm {
     /* Box */
     width: 90%;
-    border: 2px solid rgb(0, 0, 0);
+    border: 2px solid rgb(194, 194, 194);
     border-radius: 16px;
     box-sizing: border-box;
     /* Text */
@@ -88,7 +91,7 @@
     color: rgb(0, 0, 0);
     background-color: rgb(9, 255, 0);
     border-radius: 6px;
-    border: 2px solid rgb(0, 0, 0);
+    border: 2px solid rgb(194, 194, 194);
     cursor: pointer;
     /* Font */
     font-size: large;
