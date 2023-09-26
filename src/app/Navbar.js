@@ -21,7 +21,7 @@ export default function Navbar() {
     const ViewPageButton = ({dest, children}) => {
         // Check Page Active
         let pageActive = false
-        if (dest === pathname) {
+        if (pathname.includes(dest)) { // if (dest === pathname) {
             pageActive = true
         }
         // Mark Link as Active or not Active
