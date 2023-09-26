@@ -47,6 +47,15 @@ export default function Navbar() {
         setDropdownActive(false)
     }
 
+    function logoutClicked() {
+        // Remove Menu
+        setDropdownActive(false)
+        // Navigate
+        router.push("/")
+        // Logout User
+        logout()
+    }
+
     return (
         <>
             <nav className="Navbar">
@@ -81,7 +90,7 @@ export default function Navbar() {
                         <div className="MenuDivider"/>
                         <button onClick={navigateToSettings}>Settings</button>
                         <div className="MenuDivider"/>
-                        <button onClick={logout}>Sign Out</button>
+                        <button onClick={logoutClicked}>Sign Out</button>
                     </ul>
                 </div>
             )}
