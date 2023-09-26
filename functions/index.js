@@ -23,6 +23,59 @@ exports.CreatePost = onCall((Data, Context) => {
   })
 });
 
+// Set Username
+exports.SetUsername = functions.https.onCall((Data, Context) => {
+  return new Promise(async function(resolve, reject) {
+    // Get User
+    const User = Context.auth
+    if (!User) {
+      return resolve({status: "error", message: "You are not Logged in."})
+    }
+    // Verify Input
+    const newUsername = Data.Username
+    if (newUsername === "") {
+      return resolve({status: "error", message: "Invalid Username."})
+    }
+    if (!/\S/.test(newUsername)) {
+      return resolve({status: "error", message: "Invalid Username."})
+    }
+    // Set Username
+    await admin.firestore().collection("Users").doc(User.uid).get()
+    .then((docSnap) => {
+      // Check User Owns Document
+      if (UserOwnsDocument(User, docSnap)) {
+        // Set Username
+        admin.firestore().collection("Users").doc(User.uid).update({
+          Username: newUsername,
+        })
+        admin.firestore().collection("UsersPublic").doc(User.uid).update({
+          Username: newUsername,
+        })
+        .then(() => {
+          resolve({status: "ok", Username: newUsername})
+        })
+        .catch((error) => {
+          printError(error)
+          return resolve({status: "error", message: "Server Error."})
+        })
+      } else {
+        return resolve({status: "error", message: "You cannot access that."})
+      }
+    })
+    // // Set Username
+    // admin.firestore().collection("Users").doc(User.uid).update({
+    //   Username: newUsername,
+    // })
+    // .then(() => {
+    //   resolve({status: "ok", Username: newUsername})
+    // })
+    // .catch((error) => {
+    //   printError(error)
+    //   reject()
+    // })
+  })
+});
+
 // Get User Profile (for Profile)
 // exports.GetUserProfile = onRequest(async (req, res) => {
 //   const data = req.body.data
@@ -97,56 +150,6 @@ exports.CreatePost = onCall((Data, Context) => {
 //     })
 //   })
 // });
-
-// Set Username 
-exports.SetUsername = functions.https.onCall((Data, Context) => {
-  return new Promise(async function(resolve, reject) {
-    // Get User
-    const User = Context.auth
-    if (!User) {
-      return resolve({status: "error", message: "You are not Logged in."})
-    }
-    // Verify Input
-    const newUsername = Data.Username
-    if (newUsername === "") {
-      return resolve({status: "error", message: "Invalid Username."})
-    }
-    if (!/\S/.test(newUsername)) {
-      return resolve({status: "error", message: "Invalid Username."})
-    }
-    // Set Username
-    await admin.firestore().collection("Users").doc(User.uid).get()
-    .then((docSnap) => {
-      // Check User Owns Document
-      if (UserOwnsDocument(User, docSnap)) {
-        // Set Username
-        admin.firestore().collection("Users").doc(User.uid).update({
-          Username: newUsername,
-        })
-        .then(() => {
-          resolve({status: "ok", Username: newUsername})
-        })
-        .catch((error) => {
-          printError(error)
-          return resolve({status: "error", message: "Server Error."})
-        })
-      } else {
-        return resolve({status: "error", message: "You cannot access that."})
-      }
-    })
-    // // Set Username
-    // admin.firestore().collection("Users").doc(User.uid).update({
-    //   Username: newUsername,
-    // })
-    // .then(() => {
-    //   resolve({status: "ok", Username: newUsername})
-    // })
-    // .catch((error) => {
-    //   printError(error)
-    //   reject()
-    // })
-  })
-});
 
 exports.EXAMPLE_ON_CALL = onCall((request) => {
   // Message text passed from the client.

@@ -31,9 +31,7 @@ export const getProfiles = async (uids) => {
         let List = []
         snapshot.docs.forEach((e) => {
             // Add Fetch
-            List.push(e.data())
-            // Print Fetch
-            //console.log("Fetched profile " + e.data().Username)
+            List.push(e.data()) // console.log("Fetched profile " + e.data().Username)
         })
         // Return Docs
         return List
@@ -75,9 +73,7 @@ export const setFirestoreUsername = async (Input) => {
     return httpsCallable(getFunctions(), "SetUsername")({
         Username: Input
     })
-    .catch((error) => {
-        printError(error)
-    })
+    .catch((error) => {console.log(error)})
 }
 
 // Get Usernames Profiles
@@ -89,12 +85,12 @@ export const setFirestoreUsername = async (Input) => {
 // }
 
 // Get All Usernames Profiles
-export const FirestoreGetArrayUserProfiles = async (docs) => {
-    return httpsCallable(getFunctions(), "FirestoreGetArrayUserProfiles")(docs)
-    .catch((error) => {
-        printError(error)
-    })
-}
+// export const FirestoreGetArrayUserProfiles = async (docs) => {
+//     return httpsCallable(getFunctions(), "FirestoreGetArrayUserProfiles")(docs)
+//     .catch((error) => {
+//         printError(error)
+//     })
+// }
 
 
 
@@ -122,11 +118,5 @@ export const RandomNumber = async () => {
         const Data = result.data;
         console.log(Data)
     })
-    .catch((error) => {printError(error)})
-}
-
-// Errors
-const printError = (error) => {
-    console.warn(error.code + " (" + error.message + ")")
-    console.warn(error.details)
+    .catch((error) => {error})
 }
