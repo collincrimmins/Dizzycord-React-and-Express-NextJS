@@ -15,6 +15,11 @@ service cloud.firestore {
       allow write: if isLoggedIn() && isOwnerByDocId(userId);
     }
 
+    match /Quizzes/{userId}/Quizzes/{id} {
+      allow read: if isLoggedIn() && isOwnerByDocId(userId);
+      allow write: if isLoggedIn() && isOwnerByDocId(userId);
+    }
+
     match /Users/{userId} {
       allow read: if true;
       allow write: if false;

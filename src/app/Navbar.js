@@ -65,6 +65,7 @@ export default function Navbar() {
                 <ul>
                     {User && (
                         <>
+                            <ViewPageButton dest="/quizzes">Quizzes</ViewPageButton>
                             <ViewPageButton dest="/users">Profile</ViewPageButton>
                             <ViewPageButton dest="/chat">Chat</ViewPageButton>
                             {/* <ViewPageButton dest="/tasks">Todos</ViewPageButton> */}
