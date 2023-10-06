@@ -1,25 +1,58 @@
-.QuizzesBody {
-    padding-top: 20px;
-    gap: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 600px;
-    margin: auto
-}
-
 /* List */
 
-.QuizzesList {
-    display: flex;
-    flex-direction: column;
+.List {
     padding-top: 10px;
     padding-bottom: 10px;
     gap: 10px;
-    width: 100%;
+    width: 600px;
+    margin: auto;
+    /* Box */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-/* Quiz */
+.CenterList {
+    gap: 20px;
+    /* Box */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.CenterQuestionFrame {
+    gap: 20px;
+    /* Box */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.Center {
+    /* Box */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Quiz Page */
+
+.QuestionHeader {
+    font-weight: bold;
+    font-size: 1.25rem;
+}
+
+.AnswerButton{
+    width: 100%;
+    margin: auto;
+    /* Box */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Quiz List */
 
 .QuizFrame {
     width: 100%;
