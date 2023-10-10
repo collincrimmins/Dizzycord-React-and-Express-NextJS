@@ -66,6 +66,12 @@
     border: 2px solid red !important;
 }
 
+.QuestionsList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 /* Quiz List */
 
 .QuizFrame {
@@ -77,10 +83,6 @@
     align-items: center;
     flex-direction: row;
     justify-content: space-between;
-}
-
-.QuizFrameBottom {
-    
 }
 
 .QuizTitle {

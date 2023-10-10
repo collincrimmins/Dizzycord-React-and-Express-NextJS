@@ -16,11 +16,11 @@ import {
   serverTimestamp 
 } from "firebase/firestore"
 
-export default function TasksPage() {
+export default function QuizzesPage() {
   const {User} = useAuthContext()
   const [quizInView, setQuizInView] = useState("")
-  const [list, setList] = useState([])
   const [quizPageSubmitted, setQuizPageSubmitted] = useState(false)
+  const [list, setList] = useState([])
   const [loading, setLoading] = useState(false)
   const QuizzesFirestore = collection(firestore, "Quizzes")
   const router = useRouter();
@@ -38,6 +38,16 @@ export default function TasksPage() {
             {Text: "4", Correct: true},
             {Text: "6", Correct: false},
             {Text: "8", Correct: false},
+          ],
+        },
+        {
+          Text: "What color is the Sky?",
+          MyAnswer:"",
+          Answers: [
+            {Text: "Blue", Correct: true},
+            {Text: "Red", Correct: false},
+            {Text: "Green", Correct: false},
+            {Text: "Black", Correct: false},
           ],
         },
       ]
@@ -114,7 +124,7 @@ export default function TasksPage() {
           </button>
         </div>
         <div className="QuizFrameBottom">
-          Not completed
+          ...
         </div>
       </div>
     )
@@ -131,11 +141,32 @@ export default function TasksPage() {
     }
     // Exit Quiz Button
     function ExitButton() {
-
+      // Clear MyAnswer's
+      Questions.forEach((v) => {
+        v.MyAnswer = ""
+      })
+      // Reset to Quiz List
+      setQuizInView("")
+      setQuizPageSubmitted(false)
     }
     // Get Quiz Results
     function GetQuizResult() {
-      
+      let TotalNumberQuestions = 0
+      let TotalScore = 0
+      Questions.forEach((v) => {
+        // Add to Total Questions
+        TotalNumberQuestions = TotalNumberQuestions + 1
+        // Check Answers for Correct
+        v.Answers.forEach((p) => {
+          if (p.Correct) {
+            if (v.MyAnswer == p.Text) {
+              TotalScore = TotalScore + 1
+            }
+          }
+        })
+      })
+      let Percentage = (TotalScore / TotalNumberQuestions) * 100
+      return Percentage + "% (" + TotalScore + "/" + TotalNumberQuestions + ")"
     }
     // Return
     return (
@@ -145,9 +176,9 @@ export default function TasksPage() {
           {quizInView}
         </div>
         {/* Questions */}
-        <div>
+        <div className="QuestionsList">
           {Questions.map((v) => {
-            return <QuestionFrame key={v} args={v}/>
+            return <QuestionFrame key={v.Text} args={v}/>
           })}
         </div>
         {/* Results */}
@@ -200,14 +231,19 @@ export default function TasksPage() {
             if (v.Title == quizInView) {
               // Find This Quiz Question
               v.Questions.forEach((p) => {
-                p.MyAnswer = AnswerText
+                // Find this Answer
+                p.Answers.forEach((q) => {
+                  // Set MyAnswer to this Answer's Text
+                  if (q.Text == AnswerText) {
+                    p.MyAnswer = AnswerText
+                  }
+                })
               })
             }
           })
           return Quizzes
         })
       }
-
       // Return
       let MyAnswerWasCorrect
       if (MyAnswer == AnswerText) {
@@ -267,7 +303,7 @@ export default function TasksPage() {
       return (
         <div className="AnswerButton">
           {SelectedButton && 
-            <button onClick={ButtonClick} className="ButtonOutlineBlack ButtonOutlineBlack ButtonRounded ButtonBlack ButtonTextLarge">
+            <button onClick={ButtonClick} className="ButtonOutlineBlack ButtonOutlineBlack ButtonRounded ButtonLightBlue ButtonTextLarge">
               {AnswerText}
             </button>
           }
@@ -325,7 +361,7 @@ export default function TasksPage() {
         {quizInView !== "" &&
           Quizzes.map((v) => {
             if (v.Title === quizInView) {
-              return <QuizPage key={v} args={v}/>
+              return <QuizPage key={v.Title} args={v}/>
             }
           })
         }
@@ -337,7 +373,7 @@ export default function TasksPage() {
             </div>
             <ul>
               {Quizzes.map((v) => {
-                return <QuizCard key={v} args={v}/>
+                return <QuizCard key={v.Title} args={v}/>
               })}
             </ul>
           </div>
