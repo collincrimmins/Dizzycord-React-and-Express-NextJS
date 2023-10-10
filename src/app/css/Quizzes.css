@@ -52,6 +52,20 @@
     justify-content: center;
 }
 
+.QuestionAnsweredCorrect {
+    border: 2px solid rgb(0, 255, 21) !important;
+    background-color: rgb(172, 255, 179) !important;
+}
+
+.QuestionAnsweredWrong {
+    border: 2px solid red !important;
+    background-color: rgba(253, 0, 0, 0.274) !important;
+}
+
+.QuestionWrong {
+    border: 2px solid red !important;
+}
+
 /* Quiz List */
 
 .QuizFrame {

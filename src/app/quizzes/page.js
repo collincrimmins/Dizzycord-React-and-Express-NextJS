@@ -20,7 +20,7 @@ export default function TasksPage() {
   const {User} = useAuthContext()
   const [quizInView, setQuizInView] = useState("")
   const [list, setList] = useState([])
-  const [inputText, setInputText] = useState("")
+  const [quizPageSubmitted, setQuizPageSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const QuizzesFirestore = collection(firestore, "Quizzes")
   const router = useRouter();
@@ -82,10 +82,9 @@ export default function TasksPage() {
     })
   }
 
-  // Quiz Card
+  // Quiz Frame
   const QuizCard = (args) => {
     const {Title, Completed, Questions} = args.args
-    //console.log(args)
     // Check Completed
     let CompletedQuiz = false
     Quizzes.forEach((p) => {
@@ -121,12 +120,22 @@ export default function TasksPage() {
     )
   }
 
-  // View Quiz
+  // Quiz Page
   const QuizPage = (args) => {
     const {Title, Completed, Questions} = args.args
-    // Submit Button
+    // Submit Quiz Button
     function SubmitButton() {
+      if (!quizPageSubmitted) {
+        setQuizPageSubmitted(true)
+      }
+    }
+    // Exit Quiz Button
+    function ExitButton() {
 
+    }
+    // Get Quiz Results
+    function GetQuizResult() {
+      
     }
     // Return
     return (
@@ -138,29 +147,52 @@ export default function TasksPage() {
         {/* Questions */}
         <div>
           {Questions.map((v) => {
-            return <QuestionTile key={v} args={v}/>
+            return <QuestionFrame key={v} args={v}/>
           })}
         </div>
+        {/* Results */}
+        {quizPageSubmitted && 
+          <div className="ContainerGeneric Center QuizTitle">
+            <div>
+              Results
+            </div>
+            <div>
+              {GetQuizResult()}
+            </div>
+          </div>
+        }
         {/* Submit Button */}
-        <button onClick={SubmitButton} className="ButtonRounded ButtonNeonGreen ButtonOutlineBlack ButtonTextLarge StartButtonQuiz">
-          Submit
-        </button>
+        {!quizPageSubmitted &&
+          <button onClick={SubmitButton} className="ButtonRounded ButtonNeonGreen ButtonOutlineBlack ButtonTextLarge StartButtonQuiz">
+            Submit
+          </button>
+        }
+        {/* Exit Button */}
+        {quizPageSubmitted &&
+          <button onClick={ExitButton} className="ButtonRounded ButtonGray ButtonOutlineBlack ButtonTextLarge StartButtonQuiz">
+            Close
+          </button>
+        }
       </div>
     )
   }
 
-  // Question Tile
-  const QuestionTile = (args) => {
+  // Question Frame
+  const QuestionFrame = (args) => {
     const {Text, MyAnswer, Answers} = args.args
-    // Answer Button
+    // Select Answer Button
     const AnswerButton = (args) => {
       const AnswerText = args.args.Text
+      const ThisAnswerIsCorect = args.args.Correct
       let SelectedButton = false
       if (MyAnswer == AnswerText) {
         SelectedButton = true
       }
-      // Clicked
+      // Clicked Answer Button
       function ButtonClick() {
+        // Check if Quiz Submitted
+        if (quizPageSubmitted) {return}
+        // Set MyAnswer
         setQuizzes((prev) => {
           let Quizzes = [...prev]
           Quizzes.forEach((v) => {
@@ -175,25 +207,102 @@ export default function TasksPage() {
           return Quizzes
         })
       }
+
       // Return
+      let MyAnswerWasCorrect
+      if (MyAnswer == AnswerText) {
+        if (ThisAnswerIsCorect) {
+          MyAnswerWasCorrect = true
+        }
+      }
+      // Quiz is Submitted
+      if (quizPageSubmitted) {
+        if (ThisAnswerIsCorect) {
+          // Make Correct Answer Green
+          return (
+            <div className="AnswerButton">
+              <button onClick={ButtonClick} className="QuestionAnsweredCorrect ButtonRounded ButtonTextLarge">
+                {AnswerText}
+              </button>
+            </div>
+          )
+        }
+        if (!MyAnswerWasCorrect) {
+          if (MyAnswer == AnswerText) {
+            // This was my Selection - Make Red
+            return (
+              <div className="AnswerButton">
+                <button onClick={ButtonClick} className="QuestionAnsweredWrong ButtonRounded ButtonTextLarge">
+                  {AnswerText}
+                </button>
+              </div>
+            )
+          } else {
+            // Unselected - Leave Gray
+            return (
+              <div className="AnswerButton">
+                <button onClick={ButtonClick} className="ButtonOutlineBlack ButtonRounded ButtonTextLarge">
+                  {AnswerText}
+                </button>
+              </div>
+            )
+          }
+        }
+        return (
+          <div className="AnswerButton">
+            {MyAnswerWasCorrect ?
+              <button onClick={ButtonClick} className="QuestionAnsweredWrong ButtonRounded ButtonTextLarge">
+                {AnswerText} wrong
+              </button>
+            :
+              <button onClick={ButtonClick} className="QuestionAnsweredCorrect ButtonRounded ButtonTextLarge">
+                {AnswerText}
+              </button>
+            }
+            
+          </div>
+        )
+      }
+      // Quiz is not Submitted
       return (
         <div className="AnswerButton">
           {SelectedButton && 
-            <button onClick={ButtonClick} className="ButtonRounded ButtonBlack ButtonOutlineBlack ButtonTextLarge StartButtonQuiz">
+            <button onClick={ButtonClick} className="ButtonOutlineBlack ButtonOutlineBlack ButtonRounded ButtonBlack ButtonTextLarge">
               {AnswerText}
             </button>
           }
           {!SelectedButton &&
-            <button onClick={ButtonClick} className="ButtonRounded ButtonGray ButtonOutlineBlack ButtonTextLarge StartButtonQuiz">
+            <button onClick={ButtonClick} className="ButtonRounded ButtonOutlineBlack ButtonGray ButtonTextLarge StartButtonQuiz">
               {AnswerText}
             </button>
           }
         </div>
       )
     }
+    // Check if Question Answer is Correct
+    function checkIfCorrect() {
+      let AnsweredCorrect
+      Answers.forEach((v) => {
+        if (AnsweredCorrect) {return}
+        if (v.Correct) {
+          if (MyAnswer == v.Text) {
+            AnsweredCorrect = true
+          }
+        }
+      })
+      return AnsweredCorrect
+    }
+    let ContainerModifier = ""
+    if (quizPageSubmitted) {
+      if (checkIfCorrect()) {
+        //ContainerModifier = ""
+      } else {
+        //ContainerModifier = "QuestionWrong"
+      }
+    }
     // Return
     return (
-      <div className="ContainerGeneric">
+      <div className={`ContainerGeneric ${ContainerModifier}`}>
         <div className="CenterQuestionFrame">
           {/* Question */}
           <div className="QuestionHeader">
@@ -220,7 +329,7 @@ export default function TasksPage() {
             }
           })
         }
-        {/* List of Quizzes */}
+        {/* Quizzes List */}
         {quizInView === "" && 
           <div className="CenterList">
             <div className="HeaderMain Center">
