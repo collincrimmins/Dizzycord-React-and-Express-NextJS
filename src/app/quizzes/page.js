@@ -22,7 +22,7 @@ export default function QuizzesPage() {
   const [quizPageSubmitted, setQuizPageSubmitted] = useState(false)
   const [list, setList] = useState([])
   const [loading, setLoading] = useState(false)
-  const QuizzesFirestore = collection(firestore, "Quizzes")
+  //const QuizzesFirestore = collection(firestore, "Quizzes")
   const router = useRouter();
 
   const [Quizzes, setQuizzes] = useState([
@@ -55,46 +55,42 @@ export default function QuizzesPage() {
   ])
 
   // Start
-  useEffect(() => {
-    // Subscribe Tasks
-    const unsubQuizzes = startQuizzesSubscription()
-    // End Listeners
-    return () => {
-      unsubQuizzes()
-    }
-  }, [])
-
-  useEffect(() => {
-    //console.log(list)
-  }, [list])
+  // useEffect(() => {
+  //   // Subscribe Tasks
+  //   const unsubQuizzes = startQuizzesSubscription()
+  //   // End Listeners
+  //   return () => {
+  //     unsubQuizzes()
+  //   }
+  // }, [])
 
   // Get User's Quiz History
-  const startQuizzesSubscription = () => {
-    // Loading
-    setLoading(true)
-    // Get Snapshot
-    const UserDoc = doc(QuizzesFirestore, User.uid)
-    const TasksCollection = collection(UserDoc, "Quizzes")
-    const Query = query(
-      TasksCollection,
-      orderBy("time", "desc"),
-    )
-    return onSnapshot(Query, async (snapshot) => {
-      // Set List
-      let List = []
-      snapshot.docs.forEach((doc) => {
-        let Item = {...doc.data(), id: doc.id}
-        List.push(Item)
-      })
-      setList(List)
-      // Loading
-      setLoading(false)
-    })
-  }
+  // const startQuizzesSubscription = () => {
+  //   // Loading
+  //   setLoading(true)
+  //   // Get Snapshot
+  //   const UserDoc = doc(QuizzesFirestore, User.uid)
+  //   const TasksCollection = collection(UserDoc, "Quizzes")
+  //   const Query = query(
+  //     TasksCollection,
+  //     orderBy("time", "desc"),
+  //   )
+  //   return onSnapshot(Query, async (snapshot) => {
+  //     // Set List
+  //     let List = []
+  //     snapshot.docs.forEach((doc) => {
+  //       let Item = {...doc.data(), id: doc.id}
+  //       List.push(Item)
+  //     })
+  //     setList(List)
+  //     // Loading
+  //     setLoading(false)
+  //   })
+  // }
 
-  // Quiz Frame
-  const QuizCard = (args) => {
-    const {Title, Completed, Questions} = args.args
+  // Quiz Item
+  const Item = (values) => {
+    const {Title, Completed, Questions} = values.args
     // Check Completed
     let CompletedQuiz = false
     Quizzes.forEach((p) => {
@@ -108,8 +104,22 @@ export default function QuizzesPage() {
       })
       if (CompletedQuiz) {return}
     })
-    // Button - Start
+    // Start Button
     function startQuiz() {
+      // Clear MyAnswer's
+      setQuizzes((prev) => {
+        let Quizzes = [...prev]
+        Quizzes.forEach((v) => {
+          v.Questions.forEach((p) => {
+            p.Answers.forEach((q) => {
+              // Reset Answers
+              p.MyAnswer = ""
+            })
+          })
+        })
+        return Quizzes
+      })
+      // Set Quiz into View
       setQuizInView(Title)
     }
     // Return
@@ -130,9 +140,9 @@ export default function QuizzesPage() {
     )
   }
 
-  // Quiz Page
-  const QuizPage = (args) => {
-    const {Title, Completed, Questions} = args.args
+  // Active Quiz Page
+  const ActiveQuizPage = (values) => {
+    const {Title, Completed, Questions} = values.args
     // Submit Quiz Button
     function SubmitButton() {
       if (!quizPageSubmitted) {
@@ -141,10 +151,6 @@ export default function QuizzesPage() {
     }
     // Exit Quiz Button
     function ExitButton() {
-      // Clear MyAnswer's
-      Questions.forEach((v) => {
-        v.MyAnswer = ""
-      })
       // Reset to Quiz List
       setQuizInView("")
       setQuizPageSubmitted(false)
@@ -178,7 +184,7 @@ export default function QuizzesPage() {
         {/* Questions */}
         <div className="QuestionsList">
           {Questions.map((v) => {
-            return <QuestionFrame key={v.Text} args={v}/>
+            return <Question key={v.Text} args={v}/>
           })}
         </div>
         {/* Results */}
@@ -208,113 +214,9 @@ export default function QuizzesPage() {
     )
   }
 
-  // Question Frame
-  const QuestionFrame = (args) => {
-    const {Text, MyAnswer, Answers} = args.args
-    // Select Answer Button
-    const AnswerButton = (args) => {
-      const AnswerText = args.args.Text
-      const ThisAnswerIsCorect = args.args.Correct
-      let SelectedButton = false
-      if (MyAnswer == AnswerText) {
-        SelectedButton = true
-      }
-      // Clicked Answer Button
-      function ButtonClick() {
-        // Check if Quiz Submitted
-        if (quizPageSubmitted) {return}
-        // Set MyAnswer
-        setQuizzes((prev) => {
-          let Quizzes = [...prev]
-          Quizzes.forEach((v) => {
-            // Find This Quiz
-            if (v.Title == quizInView) {
-              // Find This Quiz Question
-              v.Questions.forEach((p) => {
-                // Find this Answer
-                p.Answers.forEach((q) => {
-                  // Set MyAnswer to this Answer's Text
-                  if (q.Text == AnswerText) {
-                    p.MyAnswer = AnswerText
-                  }
-                })
-              })
-            }
-          })
-          return Quizzes
-        })
-      }
-      // Return
-      let MyAnswerWasCorrect
-      if (MyAnswer == AnswerText) {
-        if (ThisAnswerIsCorect) {
-          MyAnswerWasCorrect = true
-        }
-      }
-      // Quiz is Submitted
-      if (quizPageSubmitted) {
-        if (ThisAnswerIsCorect) {
-          // Make Correct Answer Green
-          return (
-            <div className="AnswerButton">
-              <button onClick={ButtonClick} className="QuestionAnsweredCorrect ButtonRounded ButtonTextLarge">
-                {AnswerText}
-              </button>
-            </div>
-          )
-        }
-        if (!MyAnswerWasCorrect) {
-          if (MyAnswer == AnswerText) {
-            // This was my Selection - Make Red
-            return (
-              <div className="AnswerButton">
-                <button onClick={ButtonClick} className="QuestionAnsweredWrong ButtonRounded ButtonTextLarge">
-                  {AnswerText}
-                </button>
-              </div>
-            )
-          } else {
-            // Unselected - Leave Gray
-            return (
-              <div className="AnswerButton">
-                <button onClick={ButtonClick} className="ButtonOutlineBlack ButtonRounded ButtonTextLarge">
-                  {AnswerText}
-                </button>
-              </div>
-            )
-          }
-        }
-        return (
-          <div className="AnswerButton">
-            {MyAnswerWasCorrect ?
-              <button onClick={ButtonClick} className="QuestionAnsweredWrong ButtonRounded ButtonTextLarge">
-                {AnswerText} wrong
-              </button>
-            :
-              <button onClick={ButtonClick} className="QuestionAnsweredCorrect ButtonRounded ButtonTextLarge">
-                {AnswerText}
-              </button>
-            }
-            
-          </div>
-        )
-      }
-      // Quiz is not Submitted
-      return (
-        <div className="AnswerButton">
-          {SelectedButton && 
-            <button onClick={ButtonClick} className="ButtonOutlineBlack ButtonOutlineBlack ButtonRounded ButtonLightBlue ButtonTextLarge">
-              {AnswerText}
-            </button>
-          }
-          {!SelectedButton &&
-            <button onClick={ButtonClick} className="ButtonRounded ButtonOutlineBlack ButtonGray ButtonTextLarge StartButtonQuiz">
-              {AnswerText}
-            </button>
-          }
-        </div>
-      )
-    }
+  // Question
+  const Question = (values) => {
+    const {Text, MyAnswer, Answers} = values.args
     // Check if Question Answer is Correct
     function checkIfCorrect() {
       let AnsweredCorrect
@@ -346,13 +248,108 @@ export default function QuizzesPage() {
           </div>
           {/* Answers */}
           {Answers.map((v) => {
-            return <AnswerButton key={v.Text} args={v}/>
+            return <Answer key={v.Text} args={v} question={{Text, MyAnswer}}/>
           })}
         </div>
       </div>
     )
   }
-  
+
+  // Answer
+  const Answer = (values) => {
+    // Answer
+    const AnswerText = values.args.Text
+    const AnswerIsCorrect = values.args.Correct
+    // Question
+    const {Text, MyAnswer} = values.question
+    // Clicked Answer Button
+    function ButtonClick() {
+      // Check if Quiz Submitted
+      if (quizPageSubmitted) {return}
+      // Set MyAnswer
+      setQuizzes((prev) => {
+        let Quizzes = [...prev]
+        Quizzes.forEach((v) => {
+          // Find This Quiz
+          if (v.Title == quizInView) {
+            // Find This Quiz Question
+            v.Questions.forEach((p) => {
+              // Find this Answer
+              p.Answers.forEach((q) => {
+                // Set MyAnswer to this Answer's Text
+                if (q.Text == AnswerText) {
+                  p.MyAnswer = AnswerText
+                }
+              })
+            })
+          }
+        })
+        return Quizzes
+      })
+    }
+    // Check Selected
+    let SelectedButton = false
+    if (MyAnswer == AnswerText) {
+      SelectedButton = true
+    }
+    // Check if my Answer is Correct
+    let MyAnswerWasCorrect
+    if (MyAnswer == AnswerText) {
+      if (AnswerIsCorrect) {
+        MyAnswerWasCorrect = true
+      }
+    }
+    if (quizPageSubmitted) {
+      // Quiz is Submitted
+      if (AnswerIsCorrect) {
+        // Make Correct Answer Green
+        return (
+          <div className="AnswerButton">
+            <button onClick={ButtonClick} className="QuestionAnsweredCorrect ButtonRounded ButtonTextLarge">
+              {AnswerText}
+            </button>
+          </div>
+        )
+      } else {
+        if (MyAnswer == AnswerText) {
+          // This was my Selection - Make Red
+          return (
+            <div className="AnswerButton">
+              <button onClick={ButtonClick} className="QuestionAnsweredWrong ButtonRounded ButtonTextLarge">
+                {AnswerText}
+              </button>
+            </div>
+          )
+        } else {
+          // Unselected - Leave Gray
+          return (
+            <div className="AnswerButton">
+              <button onClick={ButtonClick} className="ButtonOutlineBlack ButtonRounded ButtonTextLarge">
+                {AnswerText}
+              </button>
+            </div>
+          )
+        }
+      }
+    } else {
+      // Quiz not Submitted
+      return (
+        <div className="AnswerButton">
+          {SelectedButton ? 
+            <button onClick={ButtonClick} className="ButtonOutlineBlack ButtonOutlineBlack ButtonRounded ButtonLightBlue ButtonTextLarge">
+              {AnswerText}
+            </button>
+          :
+            <button onClick={ButtonClick} className="ButtonRounded ButtonOutlineBlack ButtonGray ButtonTextLarge StartButtonQuiz">
+              {AnswerText}
+            </button>
+          }
+        </div>
+      )
+    }
+  }
+
+  // Return
   return (
     <main>
       <LoadingFrameFullScreen loading={loading}/>
@@ -361,7 +358,7 @@ export default function QuizzesPage() {
         {quizInView !== "" &&
           Quizzes.map((v) => {
             if (v.Title === quizInView) {
-              return <QuizPage key={v.Title} args={v}/>
+              return <ActiveQuizPage key={v.Title} args={v}/>
             }
           })
         }
@@ -373,7 +370,7 @@ export default function QuizzesPage() {
             </div>
             <ul>
               {Quizzes.map((v) => {
-                return <QuizCard key={v.Title} args={v}/>
+                return <Item key={v.Title} args={v}/>
               })}
             </ul>
           </div>
